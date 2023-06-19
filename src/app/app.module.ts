@@ -2,29 +2,35 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxsModule } from '@ngxs/store';
 
-import { SharedModule } from './core/shared/shared.module'
+import { SharedModule } from './core/shared/shared.module';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './login/login.component';
+import { LoginService } from './core/shared/services/login.service';
+
+import { appStates } from './redux/app.state';
 
 @NgModule({
   declarations: [
     AppComponent,
     FooterComponent,
     HeaderComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
-    SharedModule,
     BrowserModule,
     HttpClientModule,
     NoopAnimationsModule,
-    AppRoutingModule
+    SharedModule,
+    AppRoutingModule,
+    NgxsModule.forRoot(appStates),
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [LoginService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

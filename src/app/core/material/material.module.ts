@@ -12,7 +12,7 @@ export const proxiedModules = [
   MatFormFieldModule,
   MatInputModule,
   MatIconModule,
-  MatButtonModule
+  MatButtonModule,
 ];
 
 @NgModule({
@@ -20,4 +20,4 @@ export const proxiedModules = [
   imports: [...proxiedModules],
   exports: [...proxiedModules],
 })
-export class MaterialModule { }
+export class MaterialModule {}

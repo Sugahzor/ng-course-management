@@ -1,1 +1,19 @@
-<p>login works!</p>
+<div>
+  <mat-card>
+    <form [formGroup]="loginForm" autocomplete="off">
+      <mat-form-field>
+          <mat-label>{{ 'login.email' | translate }}</mat-label>
+          <input type="email" formControlName="email" matInput autofocus required (keydown.enter)="onEnter($event)">
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">{{ 'login.emailRequired' | translate }}
+          </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+          <mat-label>{{ 'login.password' | translate }}</mat-label>
+          <input type="password" formControlName="password" matInput autofocus required (keydown.enter)="onEnter($event)">
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">{{ 'login.passwordRequired' | translate }}
+          </mat-error>
+      </mat-form-field>
+      <button mat-button (click)="loginUser()">{{ 'login.button' | translate }}</button> 
+    </form>
+  </mat-card>
+</div>

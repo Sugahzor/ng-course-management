@@ -1,0 +1,18 @@
+app-login {
+  mat-card {
+    form {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      mat-form-field {
+        margin: 10px auto;
+        max-width: 50%;
+      }
+      button {
+        margin-top: 20px;
+        max-width: 30%;
+        align-self: center;
+      }
+    }
+  }
+}

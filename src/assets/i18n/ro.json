@@ -2,6 +2,8 @@
     "login": {
         "email": "E-mail",
         "password": "Parola",
-        "button": "Login"
+        "button": "Login",
+        "emailRequired": "Campul nu poate fi gol.",
+        "passwordRequired": "Campul nu poate fi gol."
     }
 }

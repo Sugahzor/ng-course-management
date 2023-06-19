@@ -2,6 +2,8 @@
     "login": {
         "email": "E-mail",
         "password": "Password",
-        "button": "Login"
+        "button": "Login",
+        "emailRequired": "Field is required.",
+        "passwordRequired": "Field is required."
     }
 }

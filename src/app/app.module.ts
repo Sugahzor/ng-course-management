@@ -11,13 +11,14 @@ import { AppComponent } from './app.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './login/login.component';
-import { LoginService } from './core/shared/services/login.service';
+import { AuthService } from './core/shared/services/auth.service';
 
 import { appStates } from './redux/app.state';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserService } from './core/shared/services/user.service';
 import { CoursesService } from './core/shared/services/courses.service';
 import { CourseDetailsComponent } from './course-details/course-details.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import { CourseDetailsComponent } from './course-details/course-details.componen
     AppRoutingModule,
     NgxsModule.forRoot(appStates),
   ],
-  providers: [LoginService, UserService, CoursesService],
+  providers: [AuthService, UserService, CoursesService, CookieService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

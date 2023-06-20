@@ -19,7 +19,10 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
   @Select(CoursesState.courseDetailsError)
   courseDetailsError$: Observable<string>;
 
-  constructor(private store: Store, private route: ActivatedRoute) {
+  constructor(
+    private store: Store,
+    private route: ActivatedRoute
+  ) {
     super();
   }
 
@@ -48,7 +51,9 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
   private initLoginErrorResponse() {
     this.courseDetailsError$
       .pipe(
-        filter((value: any) => value !== null && value !== undefined),
+        filter(
+          (value: any) => value !== '' && value !== null && value !== undefined
+        ),
         takeUntil(this.unsubscribe$)
       )
       .subscribe((error) =>

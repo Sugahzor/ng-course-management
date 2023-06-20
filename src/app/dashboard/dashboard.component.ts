@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
+import { CookieService } from 'ngx-cookie-service';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { __values } from 'tslib';
 import { PROFESSOR, STUDENT } from '../core/constants.model';
@@ -28,7 +29,8 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   constructor(
     private userService: UserService,
     private store: Store,
-    private router: Router
+    private router: Router,
+    private cookieService: CookieService
   ) {
     //TODO: persist data on refresh
     super();
@@ -54,7 +56,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   }
 
   enrollUser(courseId: number) {
-    console.log('Implement enroll functionality');
+    console.log('Implement enroll functionality for user: ', this.cookieService.get('userId'));
   }
 
   private initCoursesResponse() {
@@ -71,7 +73,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   private initLoginErrorResponse() {
     this.coursesError$
       .pipe(
-        filter((value: any) => value !== null && value !== undefined),
+        filter((value: any) => value !== '' && value !== null && value !== undefined),
         takeUntil(this.unsubscribe$)
       )
       .subscribe((error) => console.error(error, 'Course BE error response'));

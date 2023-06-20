@@ -28,6 +28,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       },
     }),
   ],
-  exports: [MaterialModule, ReactiveFormsModule, FormsModule, TranslateModule],
+  exports: [CommonModule, MaterialModule, ReactiveFormsModule, FormsModule, TranslateModule],
 })
 export class SharedModule {}

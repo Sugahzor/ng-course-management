@@ -14,6 +14,9 @@ import { LoginComponent } from './login/login.component';
 import { LoginService } from './core/shared/services/login.service';
 
 import { appStates } from './redux/app.state';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { UserService } from './core/shared/services/user.service';
+import { CoursesService } from './core/shared/services/courses.service';
 
 @NgModule({
   declarations: [
@@ -21,6 +24,7 @@ import { appStates } from './redux/app.state';
     FooterComponent,
     HeaderComponent,
     LoginComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,7 +34,7 @@ import { appStates } from './redux/app.state';
     AppRoutingModule,
     NgxsModule.forRoot(appStates),
   ],
-  providers: [LoginService],
+  providers: [LoginService, UserService, CoursesService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

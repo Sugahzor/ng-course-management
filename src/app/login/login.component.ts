@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { UserDTO } from '../core/shared/models/app.model';
+import { UserService } from '../core/shared/services/user.service';
 import { LoginUser } from '../redux/login.actions';
 import { LoginState } from '../redux/login.state';
 
@@ -12,26 +14,31 @@ import { LoginState } from '../redux/login.state';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
-export class LoginComponent extends BaseComponent implements OnInit{
+export class LoginComponent extends BaseComponent implements OnInit {
   loginForm: FormGroup;
   userResponse: UserDTO;
 
   @Select(LoginState.userResponse) userResponse$: Observable<UserDTO>;
   @Select(LoginState.loginError) loginError$: Observable<string>;
 
-  constructor(private fb: FormBuilder, private store: Store) {
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+    private router: Router,
+    private userService: UserService
+  ) {
     super();
     this.loginForm = this.fb.group({
       email: new FormControl(''),
-      password: new FormControl('')
+      password: new FormControl(''),
     });
   }
 
   override ngOnInit(): void {
-      this.initAuthorizationResponse();
-      this.initLoginErrorResponse();
+    this.initAuthorizationResponse();
+    this.initLoginErrorResponse();
   }
 
   onEnter(event: any) {
@@ -41,7 +48,7 @@ export class LoginComponent extends BaseComponent implements OnInit{
     }
     this.loginUser();
   }
-  
+
   loginUser() {
     if (this.loginForm.get('email')?.pristine) {
       this.loginForm.get('email')?.setErrors({ required: true });
@@ -54,30 +61,27 @@ export class LoginComponent extends BaseComponent implements OnInit{
     }
     let loginData = {
       userEmail: this.loginForm.value.email.trim(),
-      userPassword: this.loginForm.value.password.trim()
+      userPassword: this.loginForm.value.password.trim(),
     };
     this.store.dispatch(new LoginUser(loginData));
-    //Emit login user event
-    // this.submitClicked.emit({ ...loginData });
   }
 
   private initAuthorizationResponse() {
     this.userResponse$
-      .pipe(
-        filter((value: any) => value!==null && value!== undefined)
-      )
-      .subscribe(userResponse => {
+      .pipe(filter((value: any) => value !== null && value !== undefined))
+      .subscribe((userResponse) => {
         this.userResponse = userResponse;
-        console.log(userResponse, "response from BE");
+        this.userService.setUserResponse({ ...userResponse });
+        this.router.navigate(['/dashboard']);
       });
   }
 
   private initLoginErrorResponse() {
     this.loginError$
       .pipe(
-        filter((value: any) => value!==null && value!== undefined),
+        filter((value: any) => value !== null && value !== undefined),
         takeUntil(this.unsubscribe$)
       )
-      .subscribe(error => console.error(error, "BE error response"));
+      .subscribe((error) => console.error(error, 'Login BE error response'));
   }
 }

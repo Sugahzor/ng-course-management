@@ -1,11 +1,11 @@
-import { LoginData, UserDTO } from "../core/shared/models/app.model";
+import { LoginData, UserDTO } from '../core/shared/models/app.model';
 
 export interface LoginStateModel {
-    userResponse: UserDTO;
-    loginError: string;
+  userResponse: UserDTO | null;
+  loginError: string;
 }
 
 export class LoginUser {
-    static readonly type = '[Login Page] Login User'
-    constructor(public loginData: LoginData) {}
+  static readonly type = '[Login Page] Login User';
+  constructor(public loginData: LoginData) {}
 }

@@ -1,5 +1,4 @@
-import { LoginState } from "./login.state";
+import { CoursesState } from './courses.state';
+import { LoginState } from './login.state';
 
-export const appStates = [
-    LoginState
-]
+export const appStates = [LoginState, CoursesState];

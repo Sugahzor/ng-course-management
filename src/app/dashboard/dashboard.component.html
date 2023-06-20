@@ -1,1 +1,28 @@
-<p>dashboard works!</p>
+<div>
+  <div class="dashboard-content">
+    <mat-card *ngFor="let course of courses">
+      <div class="course-info">
+        <mat-card-header>
+          {{ course.courseName }}
+        </mat-card-header>
+        <img mat-card-image [src]="course.imageUrl" />
+      </div>
+      <div class="course-content">
+        <mat-card-content>
+          <p>Course description required</p>
+          <button mat-button [routerLink]="['/course', course.courseId]">
+            Curriculum details
+          </button>
+          <button
+            *ngIf="isUserStudent()"
+            mat-button
+            (click)="enrollUser(course.courseId)"
+          >
+            Enroll in course
+          </button>
+        </mat-card-content>
+      </div>
+    </mat-card>
+  </div>
+  <button *ngIf="isUserProfessor()" mat-button>Add New Course</button>
+</div>

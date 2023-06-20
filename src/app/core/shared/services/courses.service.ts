@@ -16,4 +16,8 @@ export class CoursesService {
   getCourses(): Observable<CourseDTO[]> {
     return this.http.get<CourseDTO[]>(`${this.ROOT_URL}${COURSES_URL}`);
   }
+
+  getCourseDetails(courseId: number) {
+    return this.http.get<CourseDTO>(`${this.ROOT_URL}${COURSES_URL}/${courseId}`);
+  }
 }

@@ -3,13 +3,19 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap, throwError } from 'rxjs';
 import { CourseDTO } from '../core/shared/models/app.model';
 import { CoursesService } from '../core/shared/services/courses.service';
-import { CoursesStateModel, GetCourses } from './courses.actions';
+import {
+  CoursesStateModel,
+  GetCourseDetails,
+  GetCourses,
+} from './courses.actions';
 
 @State<CoursesStateModel>({
   name: 'courses',
   defaults: {
     coursesResponse: [],
-    coursesErrorResponse: '',
+    coursesError: '',
+    courseDetails: null,
+    courseDetailsError: '',
   },
 })
 @Injectable()
@@ -22,8 +28,18 @@ export class CoursesState {
   }
 
   @Selector()
-  static coursesErrorResponse(state: CoursesStateModel) {
-    return state.coursesErrorResponse;
+  static coursesError(state: CoursesStateModel) {
+    return state.coursesError;
+  }
+
+  @Selector()
+  static courseDetails(state: CoursesStateModel) {
+    return state.courseDetails;
+  }
+
+  @Selector()
+  static courseDetailsError(state: CoursesStateModel) {
+    return state.courseDetailsError;
   }
 
   @Action(GetCourses)
@@ -31,13 +47,33 @@ export class CoursesState {
     return this.coursesService.getCourses().pipe(
       catchError((error: string) => {
         ctx.patchState({
-          coursesErrorResponse: error,
+          coursesError: error,
         });
         throw throwError(() => new Error(error));
       }),
       tap((coursesResponse: CourseDTO[]) => {
         ctx.patchState({
           coursesResponse: coursesResponse,
+        });
+      })
+    );
+  }
+
+  @Action(GetCourseDetails)
+  getCourseDetails(
+    ctx: StateContext<CoursesStateModel>,
+    action: GetCourseDetails
+  ) {
+    return this.coursesService.getCourseDetails(action.courseId).pipe(
+      catchError((error: string) => {
+        ctx.patchState({
+          courseDetailsError: error,
+        });
+        throw throwError(() => new Error(error));
+      }),
+      tap((courseDetailsResponse: CourseDTO) => {
+        ctx.patchState({
+          courseDetails: courseDetailsResponse,
         });
       })
     );

@@ -1,0 +1,39 @@
+app-dashboard {
+  .dashboard-content {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  mat-card {
+    display: flex;
+    flex-flow: column row;
+    justify-content: space-between;
+    max-width: 45%;
+    margin: 10px 20px;
+    &.mdc-card {
+      flex-direction: row;
+    }
+    &.mat-mdc-card {
+      border: thick double #32a1ce;
+    }
+
+    .course-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      max-width: 33%;
+      img {
+        max-width: -webkit-fill-available;
+      }
+      align-self: center;
+    }
+
+    .course-content {
+      max-width: 65%;
+      align-self: center;
+      button {
+        background-color: lightseagreen;
+      }
+    }
+  }
+}

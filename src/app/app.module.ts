@@ -17,6 +17,7 @@ import { appStates } from './redux/app.state';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserService } from './core/shared/services/user.service';
 import { CoursesService } from './core/shared/services/courses.service';
+import { CourseDetailsComponent } from './course-details/course-details.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { CoursesService } from './core/shared/services/courses.service';
     HeaderComponent,
     LoginComponent,
     DashboardComponent,
+    CourseDetailsComponent,
   ],
   imports: [
     BrowserModule,

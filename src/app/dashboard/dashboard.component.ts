@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { __values } from 'tslib';
+import { PROFESSOR, STUDENT } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { CourseDTO, UserDTO } from '../core/shared/models/app.model';
 import { UserService } from '../core/shared/services/user.service';
@@ -12,26 +14,47 @@ import { CoursesState } from '../redux/courses.state';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DashboardComponent extends BaseComponent implements OnInit {
-  userResponse: UserDTO;
-  coursesResponse: CourseDTO[];
+  userDetails: UserDTO;
+  courses: CourseDTO[];
   @Select(CoursesState.coursesResponse) coursesResponse$: Observable<
     CourseDTO[]
   >;
-  @Select(CoursesState.coursesErrorResponse)
-  coursesErrorResponse$: Observable<string>;
+  @Select(CoursesState.coursesError)
+  coursesError$: Observable<string>;
 
-  constructor(private userService: UserService, private store: Store) {
+  constructor(
+    private userService: UserService,
+    private store: Store,
+    private router: Router
+  ) {
+    //TODO: persist data on refresh
     super();
-    this.userResponse = { ...this.userService.getUserResponse() };
+    this.userDetails = { ...this.userService.getUserResponse() };
     this.store.dispatch(new GetCourses());
   }
 
   override ngOnInit(): void {
-    console.log(this.userResponse, 'userResponse in DashboardComponent');
     this.initCoursesResponse();
     this.initLoginErrorResponse();
+  }
+
+  goToDetails(courseId: number): void {
+    this.router.navigate([`/course/${courseId}`]);
+  }
+
+  isUserProfessor() {
+    return this.userDetails.userRole.toUpperCase() === PROFESSOR;
+  }
+
+  isUserStudent() {
+    return this.userDetails.userRole.toUpperCase() === STUDENT;
+  }
+
+  enrollUser(courseId: number) {
+    console.log('Implement enroll functionality');
   }
 
   private initCoursesResponse() {
@@ -41,13 +64,12 @@ export class DashboardComponent extends BaseComponent implements OnInit {
         takeUntil(this.unsubscribe$)
       )
       .subscribe((coursesResponse) => {
-        this.coursesResponse = { ...coursesResponse };
-        console.log(this.coursesResponse, 'courses ok?');
+        this.courses = [...coursesResponse];
       });
   }
 
   private initLoginErrorResponse() {
-    this.coursesErrorResponse$
+    this.coursesError$
       .pipe(
         filter((value: any) => value !== null && value !== undefined),
         takeUntil(this.unsubscribe$)

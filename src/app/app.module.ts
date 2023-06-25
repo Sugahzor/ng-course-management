@@ -20,6 +20,7 @@ import { CourseDetailsComponent } from './course-details/course-details.componen
 import { CookieService } from 'ngx-cookie-service';
 import { LessonsListComponent } from './lessons-list/lessons-list.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
+import { AddCourseComponent } from './add-course/add-course.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     CourseDetailsComponent,
     LessonsListComponent,
     FileUploadComponent,
+    AddCourseComponent,
   ],
   imports: [
     BrowserModule,

@@ -29,13 +29,16 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
   courseDetails: CourseDTO;
   displayAvailableLessonList = false;
 
-  @Select(CoursesState.courseDetails) courseDetails$: Observable<CourseDTO>;
+  @Select(CoursesState.courseDetails)
+  courseDetails$: Observable<CourseDTO>;
   @Select(CoursesState.courseDetailsError)
   courseDetailsError$: Observable<string>;
   @Select(LessonsState.saveLessonResponse)
   saveLessonResponse$: Observable<LessonDTO>;
   @Select(CoursesState.removeLessonResponse)
   removeLessonResponse$: Observable<string>;
+  @Select(CoursesState.removeLessonError)
+  removeLessonError$: Observable<string>;
 
   constructor(
     private store: Store,
@@ -52,6 +55,7 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
     this.initLoginErrorResponse();
     this.initSaveLessonResponse();
     this.initRemoveLessonResponse();
+    this.initRemoveLessonError();
   }
 
   isUserProfessor(): boolean {
@@ -131,5 +135,18 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
         this.store.dispatch(new ClearRemoveLessonResponse());
         window.location.reload();
       });
+  }
+
+  private initRemoveLessonError() {
+    this.removeLessonError$
+      .pipe(
+        filter(
+          (value: any) => value !== '' && value !== null && value !== undefined
+        ),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((error) =>
+        console.error(error, 'Remove Lesson from Course BE error response')
+      );
   }
 }

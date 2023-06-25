@@ -3,7 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { COURSES_URL } from '../../constants.model';
-import { CourseDTO, CurriculumCreationDTO, LessonDTO } from '../models/app.model';
+import {
+  CourseDTO,
+  CurriculumCreationDTO,
+  SaveCourseRequest,
+} from '../models/app.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +31,12 @@ export class CoursesService {
   }
 
   removeLessonFromCourse(courseId: number, lessonId: number) {
-    return this.http.delete(`${this.FULL_COURSES_URL}/${courseId}/lessonId/${lessonId}`)
+    return this.http.delete(
+      `${this.FULL_COURSES_URL}/${courseId}/lessonId/${lessonId}`
+    );
+  }
+
+  saveCourse(course: SaveCourseRequest): Observable<CourseDTO> {
+    return this.http.post<CourseDTO>(this.FULL_COURSES_URL, course);
   }
 }

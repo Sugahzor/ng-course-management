@@ -34,3 +34,9 @@ export interface CurriculumCreationDTO {
   courseId: number;
   lessonIdList: number[];
 }
+
+export interface SaveCourseRequest {
+  name: string;
+  imageUrl: string;
+  userId: number;
+}

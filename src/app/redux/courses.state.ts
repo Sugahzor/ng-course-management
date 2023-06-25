@@ -10,6 +10,7 @@ import {
   GetCourseDetails,
   GetCourses,
   RemoveLessonFromCourse,
+  SaveCourse,
 } from './courses.actions';
 
 @State<CoursesStateModel>({
@@ -23,6 +24,8 @@ import {
     addLessonsError: '',
     removeLessonResponse: '',
     removeLessonError: '',
+    saveCourseResponse: null,
+    saveCourseError: '',
   },
 })
 @Injectable()
@@ -62,6 +65,21 @@ export class CoursesState {
   @Selector()
   static removeLessonResponse(state: CoursesStateModel) {
     return state.removeLessonResponse;
+  }
+
+  @Selector()
+  static removeLessonError(state: CoursesStateModel) {
+    return state.removeLessonError;
+  }
+
+  @Selector()
+  static saveCourseResponse(state: CoursesStateModel) {
+    return state.saveCourseResponse;
+  }
+
+  @Selector()
+  static saveCourseError(state: CoursesStateModel) {
+    return state.saveCourseError;
   }
 
   @Action(GetCourses)
@@ -148,5 +166,22 @@ export class CoursesState {
     ctx.patchState({
       removeLessonResponse: '',
     });
+  }
+
+  @Action(SaveCourse)
+  saveCourse(ctx: StateContext<CoursesStateModel>, action: SaveCourse) {
+    return this.coursesService.saveCourse(action.course).pipe(
+      catchError((error: string) => {
+        ctx.patchState({
+          saveCourseError: error,
+        });
+        throw throwError(() => new Error(error));
+      }),
+      tap((saveCourseResponse) =>
+        ctx.patchState({
+          saveCourseResponse: saveCourseResponse,
+        })
+      )
+    );
   }
 }

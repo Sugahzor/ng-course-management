@@ -64,6 +64,10 @@ export class DashboardComponent extends BaseComponent implements OnInit {
     );
   }
 
+  addNewCourse() {
+    this.router.navigate(['/new-course']);
+  }
+
   private initCoursesResponse() {
     this.coursesResponse$
       .pipe(

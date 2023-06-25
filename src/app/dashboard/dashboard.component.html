@@ -24,5 +24,7 @@
       </div>
     </mat-card>
   </div>
-  <button *ngIf="isUserProfessor()" mat-button>Add New Course</button>
+  <button *ngIf="isUserProfessor()" mat-button (click)="addNewCourse()">
+    Add New Course
+  </button>
 </div>

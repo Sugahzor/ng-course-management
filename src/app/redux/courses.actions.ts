@@ -1,4 +1,5 @@
 import {
+  SaveCourseRequest,
   CourseDTO,
   CurriculumCreationDTO,
 } from '../core/shared/models/app.model';
@@ -12,6 +13,8 @@ export interface CoursesStateModel {
   addLessonsError: string;
   removeLessonResponse: string;
   removeLessonError: string;
+  saveCourseResponse: CourseDTO | null;
+  saveCourseError: string;
 }
 
 export class GetCourses {
@@ -37,4 +40,9 @@ export class RemoveLessonFromCourse {
 export class ClearRemoveLessonResponse {
   static readonly type = '[Courses] Remove Lesson Cleanup';
   constructor() {}
+}
+
+export class SaveCourse {
+  static readonly type = '[Courses] Save course';
+  constructor(public course: SaveCourseRequest) {}
 }

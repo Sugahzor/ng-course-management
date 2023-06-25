@@ -1,0 +1,21 @@
+<div class="new-course-container">
+  <form [formGroup]="addCourseForm" autocomplete="off">
+    <input
+      type="text"
+      formControlName="courseName"
+      matInput
+      autofocus
+      required
+    />
+    <label for="imgUrl">Add image url</label>
+    <input
+      type="text"
+      name="imgUrl"
+      formControlName="courseImageUrl"
+      matInput
+      autofocus
+      required
+    />
+    <button (click)="saveCourse()">Save New Course</button>
+  </form>
+</div>

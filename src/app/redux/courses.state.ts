@@ -4,6 +4,7 @@ import { catchError, tap, throwError } from 'rxjs';
 import { CourseDTO } from '../core/shared/models/app.model';
 import { CoursesService } from '../core/shared/services/courses.service';
 import {
+  AddLessonsToCourse,
   CoursesStateModel,
   GetCourseDetails,
   GetCourses,
@@ -16,6 +17,8 @@ import {
     coursesError: '',
     courseDetails: null,
     courseDetailsError: '',
+    addLessonsResponse: null,
+    addLessonsError: ''
   },
 })
 @Injectable()
@@ -40,6 +43,16 @@ export class CoursesState {
   @Selector()
   static courseDetailsError(state: CoursesStateModel) {
     return state.courseDetailsError;
+  }
+
+  @Selector()
+  static addLessonsResponse(state: CoursesStateModel) {
+    return state.addLessonsResponse;
+  }
+
+  @Selector()
+  static addLessonsError(state: CoursesStateModel) {
+    return state.addLessonsError;
   }
 
   @Action(GetCourses)
@@ -77,5 +90,22 @@ export class CoursesState {
         });
       })
     );
+  }
+
+  @Action(AddLessonsToCourse)
+  AddLessonsToCourse(ctx: StateContext<CoursesStateModel>, action: AddLessonsToCourse) {
+    return this.coursesService.addLessonsToCourse(action.curriculum).pipe(
+      catchError((error: string) => {
+        ctx.patchState({
+          addLessonsError: error,
+        });
+        throw throwError(() => new Error(error));
+      }),
+      tap(addLessonsResponse => {
+        ctx.patchState({
+          addLessonsResponse: addLessonsResponse
+        })
+      })
+    )
   }
 }

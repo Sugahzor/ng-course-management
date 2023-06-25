@@ -14,7 +14,7 @@
             Curriculum details
           </button>
           <button
-            *ngIf="isUserStudent()"
+            *ngIf="isUserStudent() && !isUserEnrolled()"
             mat-button
             (click)="enrollUser(course.courseId)"
           >

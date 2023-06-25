@@ -14,18 +14,23 @@ export interface CourseDTO {
   courseId: number;
   courseName: string;
   imageUrl: string;
-  lessons: LessonDTO[];
+  lessonDTOList: LessonDTO[];
 }
 
 export interface LessonDTO {
-  id: number;
+  id?: number;
   name: string;
   content: string;
-  userId: number;
-  attendanceResponseDTO: AttendanceResponseDTO;
+  userId: number | string;
+  attendanceResponseDTO?: AttendanceResponseDTO;
 }
 
 export interface AttendanceResponseDTO {
   id: number;
   attendanceGrade: number;
+}
+
+export interface CurriculumCreationDTO {
+  courseId: number;
+  lessonIdList: number[];
 }

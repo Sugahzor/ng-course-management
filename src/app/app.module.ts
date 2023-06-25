@@ -19,6 +19,8 @@ import { UserService } from './core/shared/services/user.service';
 import { CoursesService } from './core/shared/services/courses.service';
 import { CourseDetailsComponent } from './course-details/course-details.component';
 import { CookieService } from 'ngx-cookie-service';
+import { LessonsListComponent } from './lessons-list/lessons-list.component';
+import { FileUploadComponent } from './file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import { CookieService } from 'ngx-cookie-service';
     LoginComponent,
     DashboardComponent,
     CourseDetailsComponent,
+    LessonsListComponent,
+    FileUploadComponent,
   ],
   imports: [
     BrowserModule,

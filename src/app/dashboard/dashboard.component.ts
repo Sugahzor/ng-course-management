@@ -55,7 +55,14 @@ export class DashboardComponent extends BaseComponent implements OnInit {
     return this.userDetails.userRole.toUpperCase() === STUDENT;
   }
 
+  isUserEnrolled() {
+    //TODO: implement
+    console.log("Need new service to check if user is enrolled?");
+    return false;
+  }
+
   enrollUser(courseId: number) {
+    //TODO: implement
     console.log('Implement enroll functionality for user: ', this.cookieService.get('userId'));
   }
 

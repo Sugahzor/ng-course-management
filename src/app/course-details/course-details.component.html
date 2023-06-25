@@ -1,1 +1,26 @@
-<p>course-details works!</p>
+<div class="course-details">
+  <div class="course-header">
+    <img [src]="courseDetails?.imageUrl" />
+    <h1>{{ courseDetails?.courseName }}</h1>
+  </div>
+
+  <div class="lessons-list">
+    <ul *ngIf="courseDetails?.lessonDTOList">
+      <li *ngFor="let lesson of courseDetails.lessonDTOList">
+        <p>{{ lesson.name }}</p>
+        <!-- //TODO: implement delete lesson from course  -->
+        <button *ngIf="isUserProfessor()">Delete Lesson</button>
+      </li>
+    </ul>
+    <p *ngIf="!courseDetails?.lessonDTOList">
+      No lessons for this course, please add some.
+    </p>
+  </div>
+</div>
+
+<button (click)="displayAllLessonsList()">Add More Lessons</button>
+<app-lessons-list
+  *ngIf="displayAvailableLessonList"
+  [courseDetails]="courseDetails"
+  (addCurriculum)="addLessonToCourse($event)"
+></app-lessons-list>

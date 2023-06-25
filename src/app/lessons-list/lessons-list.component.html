@@ -1,0 +1,25 @@
+<div class="lessons-container">
+  <ul *ngIf="viewAvailableLessonList?.length">
+    <li *ngFor="let lesson of viewAvailableLessonList">
+      <p>{{ lesson.name }}</p>
+      <button *ngIf="courseDetails?.courseId" (click)="addLessonToCourse(lesson.id || null)">Add lesson to course</button>
+    </li>
+  </ul>
+  <div>
+    <p>Add new Lesson</p>
+    <form [formGroup]="addLessonForm" autocomplete="off">
+      <input
+        type="text"
+        formControlName="lessonName"
+        matInput
+        autofocus
+        required
+      />
+      <file-upload
+        [requiredFileType]="'application/pdf'"
+        (selectFile)="onSelectFile($event)"
+      ></file-upload>
+      <button (click)="saveLesson()">Save Lesson - make text a binding depending on where lesson-list is diplayed</button>
+    </form>
+  </div>
+</div>

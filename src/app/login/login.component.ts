@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { UserDTO } from '../core/shared/models/app.model';
-import { UserService } from '../core/shared/services/user.service';
 import { LoginUser } from '../redux/auth.actions';
 import { AuthState } from '../redux/auth.state';
 
@@ -28,7 +27,6 @@ export class LoginComponent extends BaseComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store,
     private router: Router,
-    private userService: UserService,
     private cookieService: CookieService
   ) {
     super();
@@ -73,8 +71,14 @@ export class LoginComponent extends BaseComponent implements OnInit {
       .pipe(filter((value: any) => value !== null && value !== undefined))
       .subscribe((userResponse) => {
         this.userResponse = userResponse;
-        this.userService.setUserResponse({ ...userResponse });
-        this.cookieService.set('userId', this.userResponse.id?.toString() as string);
+        this.cookieService.set(
+          'userId',
+          this.userResponse.id?.toString() as string
+        );
+        this.cookieService.set(
+          'userRole',
+          this.userResponse.userRole?.toString() as string
+        );
         this.router.navigate(['/dashboard']);
       });
   }
@@ -82,7 +86,9 @@ export class LoginComponent extends BaseComponent implements OnInit {
   private initLoginErrorResponse() {
     this.loginError$
       .pipe(
-        filter((value: any) => value !== '' && value !== null && value !== undefined),
+        filter(
+          (value: any) => value !== '' && value !== null && value !== undefined
+        ),
         takeUntil(this.unsubscribe$)
       )
       .subscribe((error) => console.error(error, 'Login BE error response'));

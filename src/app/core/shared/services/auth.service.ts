@@ -23,5 +23,6 @@ export class AuthService {
 
   logout() {
     this.cookieService.delete('userId');
+    this.cookieService.delete('userRole');
   }
 }

@@ -4,13 +4,13 @@ import { Select, Store } from '@ngxs/store';
 import { CookieService } from 'ngx-cookie-service';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { BaseComponent } from '../core/shared/base/base.component';
-import {
-  CourseDTO,
-  LessonDTO,
-  UserDTO,
-} from '../core/shared/models/app.model';
+import { CourseDTO, LessonDTO, UserDTO } from '../core/shared/models/app.model';
 import { CoursesState } from '../redux/courses.state';
-import { SaveLesson } from '../redux/lessons.actions';
+import {
+  ClearDeleteLessonResponse,
+  DeleteLesson,
+  SaveLesson,
+} from '../redux/lessons.actions';
 import { LessonsState } from '../redux/lessons.state';
 
 @Component({
@@ -33,7 +33,10 @@ export class LessonsListComponent extends BaseComponent implements OnInit {
   @Select(CoursesState.addLessonsResponse)
   addLessonsResponse$: Observable<CourseDTO>;
   @Select(CoursesState.addLessonsError) addLessonsError$: Observable<string>;
-  @Select(LessonsState.saveLessonResponse) saveLessonResponse$: Observable<LessonDTO>;
+  @Select(LessonsState.saveLessonResponse)
+  saveLessonResponse$: Observable<LessonDTO>;
+  @Select(LessonsState.deleteLessonResponse)
+  deleteLessonResponse$: Observable<string>;
 
   constructor(
     private fb: FormBuilder,
@@ -52,6 +55,7 @@ export class LessonsListComponent extends BaseComponent implements OnInit {
     this.initAddLessonsResponse();
     this.initAddLessonsError();
     this.initSaveLessonResponse();
+    this.initDeleteLessonResponse();
   }
 
   onSelectFile(file: File) {
@@ -81,7 +85,7 @@ export class LessonsListComponent extends BaseComponent implements OnInit {
     let lessonInfo: LessonDTO = {
       name: formData.get('name') as string,
       // content: formData.get('content') as string,
-      content: "4pyTIMOgIGxhIG1vZGU=",
+      content: '4pyTIMOgIGxhIG1vZGU=',
       userId: formData.get('userId') as string,
     };
     this.store.dispatch(new SaveLesson(lessonInfo));
@@ -93,6 +97,14 @@ export class LessonsListComponent extends BaseComponent implements OnInit {
       return;
     }
     this.addCurriculum.emit(lessonId);
+  }
+
+  deleteLesson(lessonId: number | null) {
+    if (!lessonId) {
+      // TODO: handle bad lesson.id
+      return;
+    }
+    this.store.dispatch(new DeleteLesson(lessonId));
   }
 
   private initLessonsList() {
@@ -158,10 +170,21 @@ export class LessonsListComponent extends BaseComponent implements OnInit {
         takeUntil(this.unsubscribe$)
       )
       .subscribe((saveLessonResponse: LessonDTO) => {
-        if  (this.courseDetails?.courseId) {
+        if (this.courseDetails?.courseId) {
           this.addCurriculum.emit(saveLessonResponse.id);
         }
-        // eventEmitt reload course-details or duiisplay lessons from BE 
+      });
+  }
+
+  private initDeleteLessonResponse() {
+    this.deleteLessonResponse$
+      .pipe(
+        filter((value: any) => value !== ''),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(() => {
+        this.store.dispatch(new ClearDeleteLessonResponse());
+        window.location.reload();
       });
   }
 }

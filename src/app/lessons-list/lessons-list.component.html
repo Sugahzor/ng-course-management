@@ -2,6 +2,7 @@
   <ul *ngIf="viewAvailableLessonList?.length">
     <li *ngFor="let lesson of viewAvailableLessonList">
       <p>{{ lesson.name }}</p>
+      <button (click)="deleteLesson(lesson.id || null)">Delete Lesson</button>
       <button *ngIf="courseDetails?.courseId" (click)="addLessonToCourse(lesson.id || null)">Add lesson to course</button>
     </li>
   </ul>

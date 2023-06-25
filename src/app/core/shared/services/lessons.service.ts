@@ -21,4 +21,8 @@ export class LessonsService {
   saveLesson(lessonInfo: LessonDTO): Observable<LessonDTO> {
     return this.http.post<LessonDTO>(this.FULL_LESSONS_URL, lessonInfo);
   }
+
+  deleteLesson(lessonId: number) {
+    return this.http.delete(`${this.FULL_LESSONS_URL}/${lessonId}`);
+  }
 }

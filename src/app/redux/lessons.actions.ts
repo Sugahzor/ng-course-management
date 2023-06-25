@@ -5,6 +5,8 @@ export interface LessonsStateModel {
   lessonsError: string;
   saveLessonResponse: LessonDTO | null;
   saveLessonError: string;
+  deleteLessonResponse: string;
+  deleteLessonError: string;
 }
 
 export class GetLessons {
@@ -15,4 +17,14 @@ export class GetLessons {
 export class SaveLesson {
   static readonly type = '[Lessons] Save New Lesson';
   constructor(public lessonInfo: LessonDTO) {}
+}
+
+export class DeleteLesson {
+  static readonly type = '[Lessons] Delete Lesson';
+  constructor(public lessonId: number) {}
+}
+
+export class ClearDeleteLessonResponse {
+  static readonly type = '[Lessons] Clear Delete Lesson Response';
+  constructor() {}
 }

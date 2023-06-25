@@ -3,11 +3,9 @@ import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { CookieService } from 'ngx-cookie-service';
 import { filter, Observable, takeUntil } from 'rxjs';
-import { __values } from 'tslib';
 import { PROFESSOR, STUDENT } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
-import { CourseDTO, UserDTO } from '../core/shared/models/app.model';
-import { UserService } from '../core/shared/services/user.service';
+import { CourseDTO } from '../core/shared/models/app.model';
 import { GetCourses } from '../redux/courses.actions';
 import { CoursesState } from '../redux/courses.state';
 
@@ -18,7 +16,6 @@ import { CoursesState } from '../redux/courses.state';
   encapsulation: ViewEncapsulation.None,
 })
 export class DashboardComponent extends BaseComponent implements OnInit {
-  userDetails: UserDTO;
   courses: CourseDTO[];
   @Select(CoursesState.coursesResponse) coursesResponse$: Observable<
     CourseDTO[]
@@ -27,14 +24,12 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   coursesError$: Observable<string>;
 
   constructor(
-    private userService: UserService,
     private store: Store,
     private router: Router,
     private cookieService: CookieService
   ) {
     //TODO: persist data on refresh
     super();
-    this.userDetails = { ...this.userService.getUserResponse() };
     this.store.dispatch(new GetCourses());
   }
 
@@ -48,22 +43,25 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   }
 
   isUserProfessor() {
-    return this.userDetails.userRole.toUpperCase() === PROFESSOR;
+    return this.cookieService.get('userRole').toUpperCase() === PROFESSOR;
   }
 
   isUserStudent() {
-    return this.userDetails.userRole.toUpperCase() === STUDENT;
+    return this.cookieService.get('userRole').toUpperCase() === STUDENT;
   }
 
   isUserEnrolled() {
     //TODO: implement
-    console.log("Need new service to check if user is enrolled?");
+    console.log('Need new service to check if user is enrolled?');
     return false;
   }
 
   enrollUser(courseId: number) {
     //TODO: implement
-    console.log('Implement enroll functionality for user: ', this.cookieService.get('userId'));
+    console.log(
+      'Implement enroll functionality for user: ',
+      this.cookieService.get('userId')
+    );
   }
 
   private initCoursesResponse() {
@@ -80,7 +78,9 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   private initLoginErrorResponse() {
     this.coursesError$
       .pipe(
-        filter((value: any) => value !== '' && value !== null && value !== undefined),
+        filter(
+          (value: any) => value !== '' && value !== null && value !== undefined
+        ),
         takeUntil(this.unsubscribe$)
       )
       .subscribe((error) => console.error(error, 'Course BE error response'));

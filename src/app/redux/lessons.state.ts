@@ -3,7 +3,13 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap, throwError } from 'rxjs';
 import { LessonDTO } from '../core/shared/models/app.model';
 import { LessonsService } from '../core/shared/services/lessons.service';
-import { GetLessons, LessonsStateModel, SaveLesson } from './lessons.actions';
+import {
+  ClearDeleteLessonResponse,
+  DeleteLesson,
+  GetLessons,
+  LessonsStateModel,
+  SaveLesson,
+} from './lessons.actions';
 
 @State<LessonsStateModel>({
   name: 'lessons',
@@ -12,6 +18,8 @@ import { GetLessons, LessonsStateModel, SaveLesson } from './lessons.actions';
     lessonsError: '',
     saveLessonResponse: null,
     saveLessonError: '',
+    deleteLessonResponse: '',
+    deleteLessonError: '',
   },
 })
 @Injectable()
@@ -36,6 +44,11 @@ export class LessonsState {
   @Selector()
   static saveLessonError(state: LessonsStateModel) {
     return state.saveLessonError;
+  }
+
+  @Selector()
+  static deleteLessonResponse(state: LessonsStateModel) {
+    return state.deleteLessonResponse;
   }
 
   @Action(GetLessons)
@@ -70,5 +83,29 @@ export class LessonsState {
         });
       })
     );
+  }
+
+  @Action(DeleteLesson)
+  deleteLesson(ctx: StateContext<LessonsStateModel>, action: DeleteLesson) {
+    return this.lessonsService.deleteLesson(action.lessonId).pipe(
+      catchError((error: string) => {
+        ctx.patchState({
+          deleteLessonError: error,
+        });
+        throw throwError(() => new Error(error));
+      }),
+      tap((response: any) => {
+        ctx.patchState({
+          deleteLessonResponse: 'complete',
+        });
+      })
+    );
+  }
+
+  @Action(ClearDeleteLessonResponse)
+  clearDeleteLessonResponse(ctx: StateContext<LessonsStateModel>) {
+    ctx.patchState({
+      deleteLessonResponse: '',
+    });
   }
 }

@@ -15,7 +15,6 @@ import { AuthService } from './core/shared/services/auth.service';
 
 import { appStates } from './redux/app.state';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { UserService } from './core/shared/services/user.service';
 import { CoursesService } from './core/shared/services/courses.service';
 import { CourseDetailsComponent } from './course-details/course-details.component';
 import { CookieService } from 'ngx-cookie-service';
@@ -41,7 +40,7 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     AppRoutingModule,
     NgxsModule.forRoot(appStates),
   ],
-  providers: [AuthService, UserService, CoursesService, CookieService],
+  providers: [AuthService, CoursesService, CookieService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -8,8 +8,7 @@
     <ul *ngIf="courseDetails?.lessonDTOList">
       <li *ngFor="let lesson of courseDetails.lessonDTOList">
         <p>{{ lesson.name }}</p>
-        <!-- //TODO: implement delete lesson from course  -->
-        <button *ngIf="isUserProfessor()">Delete Lesson</button>
+        <button *ngIf="isUserProfessor()" (click)="removeLessonFromCourse(lesson.id || null)">Delete Lesson</button>
       </li>
     </ul>
     <p *ngIf="!courseDetails?.lessonDTOList">

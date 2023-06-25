@@ -5,9 +5,11 @@ import { CourseDTO } from '../core/shared/models/app.model';
 import { CoursesService } from '../core/shared/services/courses.service';
 import {
   AddLessonsToCourse,
+  ClearRemoveLessonResponse,
   CoursesStateModel,
   GetCourseDetails,
   GetCourses,
+  RemoveLessonFromCourse,
 } from './courses.actions';
 
 @State<CoursesStateModel>({
@@ -18,7 +20,9 @@ import {
     courseDetails: null,
     courseDetailsError: '',
     addLessonsResponse: null,
-    addLessonsError: ''
+    addLessonsError: '',
+    removeLessonResponse: '',
+    removeLessonError: '',
   },
 })
 @Injectable()
@@ -53,6 +57,11 @@ export class CoursesState {
   @Selector()
   static addLessonsError(state: CoursesStateModel) {
     return state.addLessonsError;
+  }
+
+  @Selector()
+  static removeLessonResponse(state: CoursesStateModel) {
+    return state.removeLessonResponse;
   }
 
   @Action(GetCourses)
@@ -93,7 +102,10 @@ export class CoursesState {
   }
 
   @Action(AddLessonsToCourse)
-  AddLessonsToCourse(ctx: StateContext<CoursesStateModel>, action: AddLessonsToCourse) {
+  addLessonsToCourse(
+    ctx: StateContext<CoursesStateModel>,
+    action: AddLessonsToCourse
+  ) {
     return this.coursesService.addLessonsToCourse(action.curriculum).pipe(
       catchError((error: string) => {
         ctx.patchState({
@@ -101,11 +113,40 @@ export class CoursesState {
         });
         throw throwError(() => new Error(error));
       }),
-      tap(addLessonsResponse => {
+      tap((addLessonsResponse) => {
         ctx.patchState({
-          addLessonsResponse: addLessonsResponse
-        })
+          addLessonsResponse: addLessonsResponse,
+        });
       })
-    )
+    );
+  }
+
+  @Action(RemoveLessonFromCourse)
+  removeLessonFromCourse(
+    ctx: StateContext<CoursesStateModel>,
+    action: RemoveLessonFromCourse
+  ) {
+    return this.coursesService
+      .removeLessonFromCourse(action.courseId, action.lessonId)
+      .pipe(
+        catchError((error: string) => {
+          ctx.patchState({
+            removeLessonError: error,
+          });
+          throw throwError(() => new Error(error));
+        }),
+        tap((response: any) => {
+          ctx.patchState({
+            removeLessonResponse: 'complete',
+          });
+        })
+      );
+  }
+
+  @Action(ClearRemoveLessonResponse)
+  clearRemoveLessonResponse(ctx: StateContext<CoursesStateModel>) {
+    ctx.patchState({
+      removeLessonResponse: '',
+    });
   }
 }

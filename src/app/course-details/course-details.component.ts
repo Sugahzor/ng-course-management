@@ -1,8 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from '../core/shared/base/base.component';
-import { CourseDTO, CurriculumCreationDTO, LessonDTO, UserDTO } from '../core/shared/models/app.model';
+import {
+  CourseDTO,
+  CurriculumCreationDTO,
+  LessonDTO,
+  UserDTO,
+} from '../core/shared/models/app.model';
 import { CoursesState } from '../redux/courses.state';
-import { AddLessonsToCourse, GetCourseDetails } from '../redux/courses.actions';
+import {
+  AddLessonsToCourse,
+  ClearRemoveLessonResponse,
+  GetCourseDetails,
+  RemoveLessonFromCourse,
+} from '../redux/courses.actions';
 import { Select, Store } from '@ngxs/store';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -26,6 +36,8 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
   courseDetailsError$: Observable<string>;
   @Select(LessonsState.saveLessonResponse)
   saveLessonResponse$: Observable<LessonDTO>;
+  @Select(CoursesState.removeLessonResponse)
+  removeLessonResponse$: Observable<string>;
 
   constructor(
     private store: Store,
@@ -42,9 +54,11 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
     this.initCourseDetails();
     this.initLoginErrorResponse();
     this.initSaveLessonResponse();
+    this.initRemoveLessonResponse();
   }
 
   isUserProfessor(): boolean {
+    //TODO: add role to cookies
     return this.userDetails.userRole === PROFESSOR;
   }
 
@@ -64,6 +78,15 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
     };
     this.store.dispatch(new AddLessonsToCourse(curriculum));
     window.location.reload();
+  }
+
+  removeLessonFromCourse(lessonId: number | null) {
+    if (!lessonId) {
+      return;
+    }
+    this.store.dispatch(
+      new RemoveLessonFromCourse(this.courseDetails.courseId, lessonId)
+    );
   }
 
   private initCourseDetails() {
@@ -98,8 +121,19 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
         takeUntil(this.unsubscribe$)
       )
       .subscribe(() => {
-        // addLessonToCourse from lesson 
         this.store.dispatch(new GetCourseDetails(this.courseId));
+      });
+  }
+
+  private initRemoveLessonResponse() {
+    this.removeLessonResponse$
+      .pipe(
+        filter((value: any) => value !== ''),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(() => {
+        this.store.dispatch(new ClearRemoveLessonResponse());
+        window.location.reload();
       });
   }
 }

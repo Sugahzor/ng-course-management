@@ -64,7 +64,6 @@ export class LessonsListComponent extends BaseComponent implements OnInit {
   }
 
   saveLesson() {
-    //TODO: also add it to course ?
     console.log('saveLesson called');
     if (this.addLessonForm.get('lessonName')?.pristine) {
       //TODO: add errrors in template

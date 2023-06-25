@@ -25,4 +25,8 @@ export class CoursesService {
   addLessonsToCourse(curriculum: CurriculumCreationDTO): Observable<CourseDTO> {
     return this.http.put<CourseDTO>(this.FULL_COURSES_URL, curriculum);
   }
+
+  removeLessonFromCourse(courseId: number, lessonId: number) {
+    return this.http.delete(`${this.FULL_COURSES_URL}/${courseId}/lessonId/${lessonId}`)
+  }
 }

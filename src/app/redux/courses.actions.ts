@@ -10,6 +10,8 @@ export interface CoursesStateModel {
   courseDetailsError: string;
   addLessonsResponse: CourseDTO | null;
   addLessonsError: string;
+  removeLessonResponse: string;
+  removeLessonError: string;
 }
 
 export class GetCourses {
@@ -25,4 +27,14 @@ export class GetCourseDetails {
 export class AddLessonsToCourse {
   static readonly type = '[Course] Add Lesson';
   constructor(public curriculum: CurriculumCreationDTO) {}
+}
+
+export class RemoveLessonFromCourse {
+  static readonly type = '[Course] Remove Lesson';
+  constructor(public courseId: number, public lessonId: number) {}
+}
+
+export class ClearRemoveLessonResponse {
+  static readonly type = '[Courses] Remove Lesson Cleanup';
+  constructor() {}
 }

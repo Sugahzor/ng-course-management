@@ -25,7 +25,9 @@
   </div>
 </div>
 
-<button (click)="displayAllLessonsList()">Add More Lessons</button>
+<button *ngIf="isUserProfessor()" (click)="displayAllLessonsList()">
+  Add More Lessons
+</button>
 <app-lessons-list
   *ngIf="displayAvailableLessonList"
   [courseDetails]="courseDetails"

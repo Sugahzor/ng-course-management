@@ -39,4 +39,8 @@ export class CoursesService {
   saveCourse(course: SaveCourseRequest): Observable<CourseDTO> {
     return this.http.post<CourseDTO>(this.FULL_COURSES_URL, course);
   }
+
+  deleteCourse(courseId: number) {
+    return this.http.delete(`${this.FULL_COURSES_URL}/${courseId}`);
+  }
 }

@@ -1,2 +1,4 @@
-<p>header works!</p>
-<button (click)="logoutUser()">Logout</button>
+<div class="header-content">
+  <button *ngIf="isLoggedIn()" (click)="logoutUser()">Logout</button>
+  <button *ngIf="isLoggedIn()" (click)="goToDashboard()">Dashboard</button>
+</div>

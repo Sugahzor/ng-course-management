@@ -8,13 +8,15 @@ import {
 import { CoursesState } from '../redux/courses.state';
 import {
   AddLessonsToCourse,
+  ClearDeleteCourseResponse,
   ClearRemoveLessonResponse,
+  DeleteCourse,
   GetCourseDetails,
   RemoveLessonFromCourse,
 } from '../redux/courses.actions';
 import { Select, Store } from '@ngxs/store';
 import { filter, Observable, takeUntil } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PROFESSOR } from '../core/constants.model';
 import { GetLessons } from '../redux/lessons.actions';
 import { LessonsState } from '../redux/lessons.state';
@@ -39,11 +41,14 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
   removeLessonResponse$: Observable<string>;
   @Select(CoursesState.removeLessonError)
   removeLessonError$: Observable<string>;
+  @Select(CoursesState.deleteCourseResponse)
+  deleteCourseResponse$: Observable<string>;
 
   constructor(
     private store: Store,
     private route: ActivatedRoute,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private router: Router
   ) {
     super();
   }
@@ -56,6 +61,7 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
     this.initSaveLessonResponse();
     this.initRemoveLessonResponse();
     this.initRemoveLessonError();
+    this.initDeleteCourseResponse();
   }
 
   isUserProfessor(): boolean {
@@ -87,6 +93,10 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
     this.store.dispatch(
       new RemoveLessonFromCourse(this.courseDetails.courseId, lessonId)
     );
+  }
+
+  deleteCourse() {
+    this.store.dispatch(new DeleteCourse(this.courseDetails.courseId));
   }
 
   private initCourseDetails() {
@@ -148,5 +158,17 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
       .subscribe((error) =>
         console.error(error, 'Remove Lesson from Course BE error response')
       );
+  }
+
+  private initDeleteCourseResponse() {
+    this.deleteCourseResponse$
+      .pipe(
+        filter((value: any) => value !== ''),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(() => {
+        this.store.dispatch(new ClearDeleteCourseResponse());
+        this.router.navigate(['/dashboard']);
+      });
   }
 }

@@ -2,6 +2,9 @@
   <div class="course-header">
     <img [src]="courseDetails?.imageUrl" />
     <h1>{{ courseDetails?.courseName }}</h1>
+    <button *ngIf="isUserProfessor()" (click)="deleteCourse()">
+      Delete Course
+    </button>
   </div>
 
   <div class="lessons-list">

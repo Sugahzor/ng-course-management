@@ -15,6 +15,7 @@ export interface CoursesStateModel {
   removeLessonError: string;
   saveCourseResponse: CourseDTO | null;
   saveCourseError: string;
+  deleteCourseResponse: string;
 }
 
 export class GetCourses {
@@ -45,4 +46,14 @@ export class ClearRemoveLessonResponse {
 export class SaveCourse {
   static readonly type = '[Courses] Save course';
   constructor(public course: SaveCourseRequest) {}
+}
+
+export class DeleteCourse {
+  static readonly type = '[Courses] Delete Course';
+  constructor(public courseId: number) {}
+}
+
+export class ClearDeleteCourseResponse {
+  static readonly type = '[Courses] Delete Course Cleanup';
+  constructor() {}
 }

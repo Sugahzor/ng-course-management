@@ -5,8 +5,10 @@ import { CourseDTO } from '../core/shared/models/app.model';
 import { CoursesService } from '../core/shared/services/courses.service';
 import {
   AddLessonsToCourse,
+  ClearDeleteCourseResponse,
   ClearRemoveLessonResponse,
   CoursesStateModel,
+  DeleteCourse,
   GetCourseDetails,
   GetCourses,
   RemoveLessonFromCourse,
@@ -26,6 +28,7 @@ import {
     removeLessonError: '',
     saveCourseResponse: null,
     saveCourseError: '',
+    deleteCourseResponse: '',
   },
 })
 @Injectable()
@@ -80,6 +83,11 @@ export class CoursesState {
   @Selector()
   static saveCourseError(state: CoursesStateModel) {
     return state.saveCourseError;
+  }
+
+  @Selector()
+  static deleteCourseResponse(state: CoursesStateModel) {
+    return state.deleteCourseResponse;
   }
 
   @Action(GetCourses)
@@ -183,5 +191,23 @@ export class CoursesState {
         })
       )
     );
+  }
+
+  @Action(DeleteCourse)
+  deleteCourse(ctx: StateContext<CoursesStateModel>, action: DeleteCourse) {
+    return this.coursesService.deleteCourse(action.courseId).pipe(
+      tap(() =>
+        ctx.patchState({
+          deleteCourseResponse: 'complete',
+        })
+      )
+    );
+  }
+
+  @Action(ClearDeleteCourseResponse)
+  clearDeleteCourseResponse(ctx: StateContext<CoursesStateModel>) {
+    ctx.patchState({
+      deleteCourseResponse: '',
+    });
   }
 }

@@ -16,8 +16,6 @@ import { CoursesState } from '../redux/courses.state';
 })
 export class AddCourseComponent extends BaseComponent implements OnInit {
   addCourseForm: FormGroup;
-  canAddLessons = false;
-  newCourseDetails: CourseDTO;
 
   @Select(CoursesState.saveCourseResponse)
   saveCourseResponse$: Observable<CourseDTO>;
@@ -59,6 +57,7 @@ export class AddCourseComponent extends BaseComponent implements OnInit {
         takeUntil(this.unsubscribe$)
       )
       .subscribe((saveCourseResponse: CourseDTO) => {
+        this.addCourseForm.reset();
         this.router.navigate([`/course/${saveCourseResponse.courseId}`]);
       });
   }

@@ -1,27 +1,28 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AddCourseComponent } from './add-course/add-course.component';
-import { CourseDetailsComponent } from './course-details/course-details.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent,
+    loadChildren: () =>
+      import('./login/login.module').then((m) => m.LoginModule),
   },
   {
     path: 'dashboard',
-    component: DashboardComponent,
-    data: { user_response: null },
+    loadChildren: () =>
+      import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
   {
     path: 'course/:id',
-    component: CourseDetailsComponent,
+    loadChildren: () =>
+      import('./course-details/course-details.module').then(
+        (m) => m.CourseDetailsModule
+      ),
   },
   {
     path: 'new-course',
-    component: AddCourseComponent,
+    loadChildren: () =>
+      import('./add-course/add-course.module').then((m) => m.AddCourseModule),
   },
 ];
 

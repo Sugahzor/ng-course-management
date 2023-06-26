@@ -10,39 +10,29 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
-import { LoginComponent } from './login/login.component';
-import { AuthService } from './core/shared/services/auth.service';
 
 import { appStates } from './redux/app.state';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { CoursesService } from './core/shared/services/courses.service';
-import { CourseDetailsComponent } from './course-details/course-details.component';
 import { CookieService } from 'ngx-cookie-service';
-import { LessonsListComponent } from './lessons-list/lessons-list.component';
-import { FileUploadComponent } from './file-upload/file-upload.component';
-import { AddCourseComponent } from './add-course/add-course.component';
+import { LoginModule } from './login/login.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { CourseDetailsModule } from './course-details/course-details.module';
+import { AddCourseModule } from './add-course/add-course.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FooterComponent,
-    HeaderComponent,
-    LoginComponent,
-    DashboardComponent,
-    CourseDetailsComponent,
-    LessonsListComponent,
-    FileUploadComponent,
-    AddCourseComponent,
-  ],
+  declarations: [AppComponent, FooterComponent, HeaderComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
     NoopAnimationsModule,
     SharedModule,
+    LoginModule,
+    DashboardModule,
+    CourseDetailsModule,
+    AddCourseModule,
     AppRoutingModule,
     NgxsModule.forRoot(appStates),
   ],
-  providers: [AuthService, CoursesService, CookieService],
+  providers: [CookieService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

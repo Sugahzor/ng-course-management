@@ -65,6 +65,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   }
 
   addNewCourse() {
+    //TODO: WHY DOES THIS NAVIGATE TO COURSE DETAILS!!!!!
     this.router.navigate(['/new-course']);
   }
 

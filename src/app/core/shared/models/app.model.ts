@@ -40,3 +40,14 @@ export interface SaveCourseRequest {
   imageUrl: string;
   userId: number;
 }
+
+export interface UserEnroll {
+  userId: number;
+  courseId: number;
+}
+
+export interface UserEnrollInfo {
+  userId: number;
+  courseId: number;
+  enrolled: boolean;
+}

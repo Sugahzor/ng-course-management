@@ -5,7 +5,7 @@ import { Select } from '@ngxs/store';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { EN_LANG } from './core/constants.model';
 import { BaseComponent } from './core/shared/base/base.component';
-import { AuthState } from './redux/auth.state';
+import { UsersState } from './redux/users.state';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,7 @@ import { AuthState } from './redux/auth.state';
 })
 export class AppComponent extends BaseComponent implements OnInit {
   title = 'ng-course-management';
-  @Select(AuthState.logoutUser) logoutUser$: Observable<boolean>;
+  @Select(UsersState.logoutUser) logoutUser$: Observable<boolean>;
 
   constructor(private translate: TranslateService, private router: Router) {
     super();

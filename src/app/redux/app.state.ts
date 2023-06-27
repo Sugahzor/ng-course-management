@@ -1,5 +1,5 @@
 import { CoursesState } from './courses.state';
-import { AuthState } from './auth.state';
+import { UsersState } from './users.state';
 import { LessonsState } from './lessons.state';
 
-export const appStates = [AuthState, CoursesState, LessonsState];
+export const appStates = [UsersState, CoursesState, LessonsState];

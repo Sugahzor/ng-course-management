@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { UserDTO } from '../core/shared/models/app.model';
-import { LoginUser } from '../redux/auth.actions';
-import { AuthState } from '../redux/auth.state';
+import { LoginUser } from '../redux/users.actions';
+import { UsersState } from '../redux/users.state';
 
 @Component({
   selector: 'app-login',
@@ -20,8 +20,8 @@ export class LoginComponent extends BaseComponent implements OnInit {
   loginForm: FormGroup;
   userResponse: UserDTO;
 
-  @Select(AuthState.userResponse) userResponse$: Observable<UserDTO>;
-  @Select(AuthState.loginError) loginError$: Observable<string>;
+  @Select(UsersState.userResponse) userResponse$: Observable<UserDTO>;
+  @Select(UsersState.loginError) loginError$: Observable<string>;
 
   constructor(
     private fb: FormBuilder,

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { CookieService } from 'ngx-cookie-service';
-import { LogoutUser } from '../redux/auth.actions';
+import { LogoutUser } from '../redux/users.actions';
 
 @Component({
   selector: 'app-header',

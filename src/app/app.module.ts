@@ -13,10 +13,6 @@ import { HeaderComponent } from './header/header.component';
 
 import { appStates } from './redux/app.state';
 import { CookieService } from 'ngx-cookie-service';
-import { LoginModule } from './login/login.module';
-import { DashboardModule } from './dashboard/dashboard.module';
-import { CourseDetailsModule } from './course-details/course-details.module';
-import { AddCourseModule } from './add-course/add-course.module';
 
 @NgModule({
   declarations: [AppComponent, FooterComponent, HeaderComponent],
@@ -25,10 +21,6 @@ import { AddCourseModule } from './add-course/add-course.module';
     HttpClientModule,
     NoopAnimationsModule,
     SharedModule,
-    LoginModule,
-    DashboardModule,
-    CourseDetailsModule,
-    AddCourseModule,
     AppRoutingModule,
     NgxsModule.forRoot(appStates),
   ],

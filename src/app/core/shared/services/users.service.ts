@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { USERS_URL } from '../../constants.model';
 import {
   LoginData,
-  UserEnrollInfo,
+  UserEnrollResponse,
   UserDTO,
   UserEnroll,
 } from '../models/app.model';
@@ -29,15 +29,8 @@ export class UsersService {
     this.cookieService.delete('userRole');
   }
 
-  checkEnrollment(userEnroll: UserEnroll): Observable<UserEnrollInfo> {
-    return this.http.post<UserEnrollInfo>(
-      `${this.FULL_USERS_URL}/enroll/check`,
-      userEnroll
-    );
-  }
-
-  enrollUser(userEnroll: UserEnroll): Observable<UserEnrollInfo> {
-    return this.http.post<UserEnrollInfo>(
+  enrollUser(userEnroll: UserEnroll): Observable<UserEnrollResponse> {
+    return this.http.post<UserEnrollResponse>(
       `${this.FULL_USERS_URL}/enroll`,
       userEnroll
     );

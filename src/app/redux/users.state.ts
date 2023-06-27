@@ -2,15 +2,13 @@ import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { UserEnrollInfo, UserDTO } from '../core/shared/models/app.model';
+import { UserDTO } from '../core/shared/models/app.model';
 import { UsersService } from '../core/shared/services/users.service';
 import {
   UsersStateModel,
   LoginUser,
   LogoutUser,
-  CheckEnrollment,
   EnrollUser,
-  ClearEnrollUserResponse,
 } from './users.actions';
 
 @State<UsersStateModel>({
@@ -20,7 +18,6 @@ import {
     loginError: '',
     logoutUser: false,
     userEnrollInfoResponse: null,
-    checkEnrollmentError: '',
     userEnrollResponse: null,
     userEnrollError: '',
   },
@@ -47,11 +44,6 @@ export class UsersState {
   @Selector()
   static userEnrollInfoResponse(state: UsersStateModel) {
     return state.userEnrollInfoResponse;
-  }
-
-  @Selector()
-  static checkEnrollmentError(state: UsersStateModel) {
-    return state.checkEnrollmentError;
   }
 
   @Selector()
@@ -91,23 +83,6 @@ export class UsersState {
       userResponse: null,
       loginError: '',
     });
-  }
-
-  @Action(CheckEnrollment)
-  checkEnrollment(ctx: StateContext<UsersStateModel>, action: CheckEnrollment) {
-    return this.usersService.checkEnrollment(action.userEnroll).pipe(
-      catchError((err: string) => {
-        ctx.patchState({
-          checkEnrollmentError: err,
-        });
-        throw throwError(() => new Error(err));
-      }),
-      tap((checkEnrollmentResponse: UserEnrollInfo) =>
-        ctx.patchState({
-          userEnrollInfoResponse: checkEnrollmentResponse,
-        })
-      )
-    );
   }
 
   @Action(EnrollUser)

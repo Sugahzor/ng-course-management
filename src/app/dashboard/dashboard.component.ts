@@ -5,14 +5,14 @@ import { CookieService } from 'ngx-cookie-service';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { PROFESSOR, STUDENT } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
-import { CourseDTO, UserEnrollInfo } from '../core/shared/models/app.model';
+import {
+  CourseDTO,
+  UserDTO,
+  UserEnrollResponse,
+} from '../core/shared/models/app.model';
 import { GetCourses } from '../redux/courses.actions';
 import { CoursesState } from '../redux/courses.state';
-import {
-  CheckEnrollment,
-  ClearEnrollUserResponse,
-  EnrollUser,
-} from '../redux/users.actions';
+import { EnrollUser } from '../redux/users.actions';
 import { UsersState } from '../redux/users.state';
 
 @Component({
@@ -23,18 +23,16 @@ import { UsersState } from '../redux/users.state';
 })
 export class DashboardComponent extends BaseComponent implements OnInit {
   courses: CourseDTO[];
-  userEnrollInfoArray: UserEnrollInfo[] = [];
+  userData: UserDTO;
   @Select(CoursesState.coursesResponse) coursesResponse$: Observable<
     CourseDTO[]
   >;
   @Select(CoursesState.coursesError)
   coursesError$: Observable<string>;
-  @Select(UsersState.userEnrollInfoResponse)
-  userEnrollInfoResponse$: Observable<UserEnrollInfo>;
-  @Select(UsersState.checkEnrollmentError)
-  checkEnrollmentError$: Observable<string>;
+  @Select(UsersState.userResponse)
+  userResponse$: Observable<UserDTO>;
   @Select(UsersState.userEnrollResponse)
-  userEnrollResponse$: Observable<UserEnrollInfo>;
+  userEnrollResponse$: Observable<UserEnrollResponse>;
   @Select(UsersState.userEnrollError)
   userEnrollError$: Observable<string>;
 
@@ -49,12 +47,11 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   }
 
   override ngOnInit(): void {
+    this.initUserResponse();
     this.initCoursesResponse();
     this.initLoginErrorResponse();
-    this.initUserEnrollInfoResponse();
     this.initUserEnrollResponse();
     this.initUserEnrollError();
-    this.initCheckEnrollmentError();
   }
 
   goToDetails(courseId: number): void {
@@ -69,10 +66,10 @@ export class DashboardComponent extends BaseComponent implements OnInit {
     return this.cookieService.get('userRole').toUpperCase() === STUDENT;
   }
 
-  isUserEnrolled(courseId: number) {
-    return this.userEnrollInfoArray.find(
-      (userEnroll) => userEnroll.courseId === courseId
-    )?.enrolled;
+  isUserEnrolled(courseIdToCheck: number) {
+    return this.userData.coursesEnrolledTo?.find(
+      (courseId) => courseId === courseIdToCheck
+    );
   }
 
   enrollUser(courseId: number) {
@@ -95,19 +92,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
         filter((value: any) => value?.length),
         takeUntil(this.unsubscribe$)
       )
-      .subscribe((coursesResponse) => {
-        this.courses = [...coursesResponse];
-        if (this.isUserStudent()) {
-          this.courses.forEach((course) =>
-            this.store.dispatch(
-              new CheckEnrollment({
-                userId: parseInt(this.cookieService.get('userId')),
-                courseId: course.courseId,
-              })
-            )
-          );
-        }
-      });
+      .subscribe((coursesResponse) => (this.courses = [...coursesResponse]));
   }
 
   private initLoginErrorResponse() {
@@ -121,47 +106,15 @@ export class DashboardComponent extends BaseComponent implements OnInit {
       .subscribe((error) => console.error(error, 'Course BE error response'));
   }
 
-  private initUserEnrollInfoResponse() {
-    this.userEnrollInfoResponse$
-      .pipe(
-        filter((value: UserEnrollInfo | null) => value !== null),
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe((userEnrollInfoResponse) =>
-        userEnrollInfoResponse
-          ? this.userEnrollInfoArray.push(userEnrollInfoResponse)
-          : ''
-      );
-  }
-
-  private initCheckEnrollmentError() {
-    this.checkEnrollmentError$
-      .pipe(
-        filter(
-          (value: any) => value !== '' && value !== null && value !== undefined
-        ),
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe((error) =>
-        console.error(error, 'Check User Enroll BE error response')
-      );
-  }
-
   private initUserEnrollResponse() {
     this.userEnrollResponse$
       .pipe(
         filter((value: any) => value !== null),
         takeUntil(this.unsubscribe$)
       )
-      .subscribe((response: UserEnrollInfo) => {
-        this.store.dispatch(new ClearEnrollUserResponse());
-        let previousUserEnrollment = this.userEnrollInfoArray.find(
-          (userEnroll) => userEnroll.courseId === response.courseId
-        );
-        previousUserEnrollment
-          ? (previousUserEnrollment.enrolled = response.enrolled)
-          : '';
-      });
+      .subscribe((response: UserEnrollResponse) =>
+        this.userData.coursesEnrolledTo.push(response.courseId)
+      );
   }
 
   private initUserEnrollError() {
@@ -175,5 +128,14 @@ export class DashboardComponent extends BaseComponent implements OnInit {
       .subscribe((error) =>
         console.error(error, 'User Enroll BE error response')
       );
+  }
+
+  private initUserResponse() {
+    this.userResponse$
+      .pipe(
+        filter((value: any) => value !== null),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((userResponse) => (this.userData = { ...userResponse }));
   }
 }

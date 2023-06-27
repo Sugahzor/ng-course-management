@@ -8,6 +8,7 @@ export interface UserDTO {
   userName: string;
   userEmail: string;
   userRole: string;
+  coursesEnrolledTo: number[];
 }
 
 export interface CourseDTO {
@@ -46,7 +47,7 @@ export interface UserEnroll {
   courseId: number;
 }
 
-export interface UserEnrollInfo {
+export interface UserEnrollResponse {
   userId: number;
   courseId: number;
   enrolled: boolean;

@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsModule } from '@ngxs/store';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 
 import { SharedModule } from './core/shared/shared.module';
 
@@ -23,6 +24,7 @@ import { CookieService } from 'ngx-cookie-service';
     SharedModule,
     AppRoutingModule,
     NgxsModule.forRoot(appStates),
+    NgxsLoggerPluginModule.forRoot()
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

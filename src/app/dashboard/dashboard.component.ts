@@ -8,11 +8,11 @@ import { BaseComponent } from '../core/shared/base/base.component';
 import {
   CourseDTO,
   UserDTO,
-  UserEnrollResponse,
+  UserEnrollInfoResponse,
 } from '../core/shared/models/app.model';
 import { GetCourses } from '../redux/courses.actions';
 import { CoursesState } from '../redux/courses.state';
-import { EnrollUser } from '../redux/users.actions';
+import { DisenrollUser, EnrollUser } from '../redux/users.actions';
 import { UsersState } from '../redux/users.state';
 
 @Component({
@@ -32,9 +32,13 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   @Select(UsersState.userResponse)
   userResponse$: Observable<UserDTO>;
   @Select(UsersState.userEnrollResponse)
-  userEnrollResponse$: Observable<UserEnrollResponse>;
+  userEnrollResponse$: Observable<UserEnrollInfoResponse>;
   @Select(UsersState.userEnrollError)
   userEnrollError$: Observable<string>;
+  @Select(UsersState.userDisenrollResponse)
+  userDisenrollResponse$: Observable<string>;
+  @Select(UsersState.userDisenrollError)
+  userDisenrollError$: Observable<string>;
 
   constructor(
     private store: Store,
@@ -52,6 +56,8 @@ export class DashboardComponent extends BaseComponent implements OnInit {
     this.initLoginErrorResponse();
     this.initUserEnrollResponse();
     this.initUserEnrollError();
+    this.initUserDisenrollResponse();
+    this.initUserDisenrollError();
   }
 
   goToDetails(courseId: number): void {
@@ -76,6 +82,15 @@ export class DashboardComponent extends BaseComponent implements OnInit {
     this.store.dispatch(
       new EnrollUser({
         userId: parseInt(this.cookieService.get('userId')),
+        courseId: courseId,
+      })
+    );
+  }
+
+  disenrollUser(courseId: number) {
+    this.store.dispatch(
+      new DisenrollUser({
+        userId: this.userData.id as number,
         courseId: courseId,
       })
     );
@@ -112,8 +127,8 @@ export class DashboardComponent extends BaseComponent implements OnInit {
         filter((value: any) => value !== null),
         takeUntil(this.unsubscribe$)
       )
-      .subscribe((response: UserEnrollResponse) =>
-        this.userData.coursesEnrolledTo.push(response.courseId)
+      .subscribe((response: UserEnrollInfoResponse) =>
+        this.userData?.coursesEnrolledTo.push(response.courseId)
       );
   }
 
@@ -137,5 +152,34 @@ export class DashboardComponent extends BaseComponent implements OnInit {
         takeUntil(this.unsubscribe$)
       )
       .subscribe((userResponse) => (this.userData = { ...userResponse }));
+  }
+
+  private initUserDisenrollResponse() {
+    this.userDisenrollResponse$
+      .pipe(
+        filter((value: any) => value !== null),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((response: UserEnrollInfoResponse) => {
+        let disenrolledCourseIndex = this.userData?.coursesEnrolledTo.findIndex(
+          (courseId) => courseId === response?.courseId
+        );
+        disenrolledCourseIndex > -1
+          ? this.userData?.coursesEnrolledTo.splice(disenrolledCourseIndex, 1)
+          : '';
+      });
+  }
+
+  private initUserDisenrollError() {
+    this.userDisenrollError$
+      .pipe(
+        filter(
+          (value: any) => value !== '' && value !== null && value !== undefined
+        ),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((error) =>
+        console.error(error, 'User Disenroll BE error response')
+      );
   }
 }

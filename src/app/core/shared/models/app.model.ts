@@ -47,7 +47,7 @@ export interface UserEnroll {
   courseId: number;
 }
 
-export interface UserEnrollResponse {
+export interface UserEnrollInfoResponse {
   userId: number;
   courseId: number;
   enrolled: boolean;

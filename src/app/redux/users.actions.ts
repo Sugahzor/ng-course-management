@@ -1,6 +1,6 @@
 import {
   LoginData,
-  UserEnrollResponse,
+  UserEnrollInfoResponse,
   UserDTO,
   UserEnroll,
 } from '../core/shared/models/app.model';
@@ -9,9 +9,11 @@ export interface UsersStateModel {
   userResponse: UserDTO | null;
   loginError: string;
   logoutUser: boolean;
-  userEnrollInfoResponse: UserEnrollResponse | null;
-  userEnrollResponse: UserEnrollResponse | null;
+  userEnrollInfoResponse: UserEnrollInfoResponse | null;
+  userEnrollResponse: UserEnrollInfoResponse | null;
   userEnrollError: string;
+  userDisenrollResponse: UserEnrollInfoResponse | null;
+  userDisenrollError: string;
 }
 
 export class LoginUser {
@@ -26,5 +28,10 @@ export class LogoutUser {
 
 export class EnrollUser {
   static readonly type = '[Users] Enroll User';
+  constructor(public userEnroll: UserEnroll) {}
+}
+
+export class DisenrollUser {
+  static readonly type = '[Users] Disenroll User';
   constructor(public userEnroll: UserEnroll) {}
 }

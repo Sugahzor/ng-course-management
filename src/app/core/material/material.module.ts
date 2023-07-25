@@ -12,7 +12,7 @@ export const proxiedModules = [
   MatInputModule,
   MatIconModule,
   MatButtonModule,
-  MatProgressBarModule
+  MatProgressBarModule,
 ];
 
 @NgModule({

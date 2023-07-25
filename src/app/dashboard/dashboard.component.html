@@ -1,5 +1,5 @@
 <div>
-  <div class="dashboard-content">
+  <div class="dashboard-content" *ngIf="courses && userData">
     <mat-card *ngFor="let course of courses">
       <div class="course-info">
         <mat-card-header>
@@ -19,6 +19,13 @@
             (click)="enrollUser(course.courseId)"
           >
             Enroll in course
+          </button>
+          <button
+            *ngIf="isUserStudent() && isUserEnrolled(course.courseId)"
+            mat-button
+            (click)="disenrollUser(course.courseId)"
+          >
+            Disenroll from course
           </button>
         </mat-card-content>
       </div>

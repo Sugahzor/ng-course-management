@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
+import { EN_LANG } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { UserDTO } from '../core/shared/models/app.model';
 import { LoginUser } from '../redux/users.actions';
@@ -24,12 +26,15 @@ export class LoginComponent extends BaseComponent implements OnInit {
   @Select(UsersState.loginError) loginError$: Observable<string>;
 
   constructor(
+    private translate: TranslateService,
     private fb: FormBuilder,
     private store: Store,
     private router: Router,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    
   ) {
     super();
+    this.translate.setDefaultLang(EN_LANG);
     this.loginForm = this.fb.group({
       email: new FormControl(''),
       password: new FormControl(''),

@@ -12,7 +12,11 @@ import {
 } from '../core/shared/models/app.model';
 import { GetCourses } from '../redux/courses.actions';
 import { CoursesState } from '../redux/courses.state';
-import { DisenrollUser, EnrollUser } from '../redux/users.actions';
+import {
+  DisenrollUser,
+  EnrollUser,
+  GetCurrentUser,
+} from '../redux/users.actions';
 import { UsersState } from '../redux/users.state';
 
 @Component({
@@ -24,6 +28,7 @@ import { UsersState } from '../redux/users.state';
 export class DashboardComponent extends BaseComponent implements OnInit {
   courses: CourseDTO[];
   userData: UserDTO;
+
   @Select(CoursesState.coursesResponse) coursesResponse$: Observable<
     CourseDTO[]
   >;
@@ -39,21 +44,24 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   userDisenrollResponse$: Observable<string>;
   @Select(UsersState.userDisenrollError)
   userDisenrollError$: Observable<string>;
+  @Select(UsersState.getUserError)
+  getUserError$: Observable<string>;
 
   constructor(
     private store: Store,
     private router: Router,
     private cookieService: CookieService
   ) {
-    //TODO: persist data on refresh
     super();
     this.store.dispatch(new GetCourses());
   }
 
   override ngOnInit(): void {
+    this.store.dispatch(new GetCurrentUser());
     this.initUserResponse();
     this.initCoursesResponse();
     this.initLoginErrorResponse();
+    this.initGetUserError();
     this.initUserEnrollResponse();
     this.initUserEnrollError();
     this.initUserDisenrollResponse();
@@ -121,6 +129,19 @@ export class DashboardComponent extends BaseComponent implements OnInit {
       .subscribe((error) => console.error(error, 'Course BE error response'));
   }
 
+  private initGetUserError() {
+    this.getUserError$
+      .pipe(
+        filter(
+          (value: any) => value !== '' && value !== null && value !== undefined
+        ),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((error) =>
+        console.error(error, 'Get User By Id BE error response')
+      );
+  }
+
   private initUserEnrollResponse() {
     this.userEnrollResponse$
       .pipe(
@@ -161,12 +182,13 @@ export class DashboardComponent extends BaseComponent implements OnInit {
         takeUntil(this.unsubscribe$)
       )
       .subscribe((response: UserEnrollInfoResponse) => {
-        let disenrolledCourseIndex = this.userData?.coursesEnrolledTo.findIndex(
-          (courseId) => courseId === response?.courseId
-        );
-        disenrolledCourseIndex > -1
-          ? this.userData?.coursesEnrolledTo.splice(disenrolledCourseIndex, 1)
-          : '';
+        if (this.userData?.coursesEnrolledTo.includes(response?.courseId)) {
+          let disenrolledCourseIndex =
+            this.userData?.coursesEnrolledTo.findIndex(
+              (courseId) => courseId === response?.courseId
+            );
+          this.userData?.coursesEnrolledTo.splice(disenrolledCourseIndex, 1);
+        }
       });
   }
 

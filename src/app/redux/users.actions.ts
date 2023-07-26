@@ -8,6 +8,7 @@ import {
 export interface UsersStateModel {
   userResponse: UserDTO | null;
   loginError: string;
+  getUserError: string;
   logoutUser: boolean;
   userEnrollInfoResponse: UserEnrollInfoResponse | null;
   userEnrollResponse: UserEnrollInfoResponse | null;
@@ -34,4 +35,9 @@ export class EnrollUser {
 export class DisenrollUser {
   static readonly type = '[Users] Disenroll User';
   constructor(public userEnroll: UserEnroll) {}
+}
+
+export class GetCurrentUser {
+  static readonly type = '[Users] Get User By Id';
+  constructor() {}
 }

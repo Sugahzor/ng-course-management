@@ -39,4 +39,8 @@ export class UsersService {
   disenrollUser(userEnroll: UserEnroll): Observable<UserEnrollInfoResponse> {
     return this.http.post<UserEnrollInfoResponse>(`${this.FULL_USERS_URL}/disenroll`, userEnroll);
   }
+
+  getUserById(): Observable<UserDTO> {
+    return this.http.get<UserDTO>(`${this.FULL_USERS_URL}/${this.cookieService.get('userId')}`);
+  }
 }

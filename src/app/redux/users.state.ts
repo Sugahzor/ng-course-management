@@ -13,6 +13,7 @@ import {
   LogoutUser,
   EnrollUser,
   DisenrollUser,
+  GetCurrentUser,
 } from './users.actions';
 
 @State<UsersStateModel>({
@@ -20,6 +21,7 @@ import {
   defaults: {
     userResponse: null,
     loginError: '',
+    getUserError: '',
     logoutUser: false,
     userEnrollInfoResponse: null,
     userEnrollResponse: null,
@@ -40,6 +42,11 @@ export class UsersState {
   @Selector()
   static loginError(state: UsersStateModel) {
     return state.loginError;
+  }
+
+  @Selector()
+  static getUserError(state: UsersStateModel) {
+    return state.getUserError;
   }
 
   @Selector()
@@ -132,6 +139,23 @@ export class UsersState {
           userDisenrollResponse: { ...response },
         })
       )
+    );
+  }
+
+  @Action(GetCurrentUser)
+  getCurrentUser(ctx: StateContext<UsersStateModel>, action: GetCurrentUser) {
+    return this.usersService.getUserById().pipe(
+      catchError((err: string) => {
+        ctx.patchState({
+          getUserError: err,
+        });
+        throw throwError(() => new Error(err));
+      }),
+      tap((userResponse: UserDTO) => {
+        ctx.patchState({
+          userResponse: userResponse
+        });
+      })
     );
   }
 }

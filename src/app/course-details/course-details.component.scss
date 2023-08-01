@@ -1,10 +1,15 @@
+//add responsiveness - media queries
 .course-details {
   border: 2px solid lightseagreen;
   margin-top: 20px;
+  padding: 10px;
 }
 img {
   max-width: 50%;
   margin-right: 20px;
+  border-top-left-radius: 60px;
+  height: 150px;
+  width: 150px;
 }
 .course-header {
     margin-top: 30px;
@@ -16,4 +21,9 @@ img {
 }
 button {
   margin: 10px;
+}
+.lessons-list {
+  li {
+    display: flex;
+  }
 }

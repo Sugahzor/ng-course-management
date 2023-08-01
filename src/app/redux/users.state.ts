@@ -2,15 +2,10 @@ import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import {
-  UserDTO,
-  UserEnrollInfoResponse,
-} from '../core/shared/models/app.model';
+import { UserDTO } from '../core/shared/models/app.model';
 import { UsersService } from '../core/shared/services/users.service';
 import {
   UsersStateModel,
-  LoginUser,
-  LogoutUser,
   EnrollUser,
   DisenrollUser,
   GetCurrentUser,
@@ -20,10 +15,7 @@ import {
   name: 'users',
   defaults: {
     userResponse: null,
-    loginError: '',
     getUserError: '',
-    logoutUser: false,
-    userEnrollInfoResponse: null,
     userEnrollResponse: null,
     userEnrollError: '',
     userDisenrollResponse: null,
@@ -40,23 +32,8 @@ export class UsersState {
   }
 
   @Selector()
-  static loginError(state: UsersStateModel) {
-    return state.loginError;
-  }
-
-  @Selector()
   static getUserError(state: UsersStateModel) {
     return state.getUserError;
-  }
-
-  @Selector()
-  static logoutUser(state: UsersStateModel) {
-    return state.logoutUser;
-  }
-
-  @Selector()
-  static userEnrollInfoResponse(state: UsersStateModel) {
-    return state.userEnrollInfoResponse;
   }
 
   @Selector()
@@ -77,35 +54,6 @@ export class UsersState {
   @Selector()
   static userDisenrollError(state: UsersStateModel) {
     return state.userDisenrollError;
-  }
-
-  @Action(LoginUser)
-  loginUser(ctx: StateContext<UsersStateModel>, action: LoginUser) {
-    return this.usersService.login(action.loginData).pipe(
-      catchError((err: string) => {
-        ctx.patchState({
-          loginError: err,
-        });
-        throw throwError(() => new Error(err));
-      }),
-      tap((userResponse: UserDTO) => {
-        ctx.patchState({
-          userResponse: userResponse,
-          loginError: '',
-          logoutUser: false,
-        });
-      })
-    );
-  }
-
-  @Action(LogoutUser)
-  logoutUser(ctx: StateContext<UsersStateModel>) {
-    this.usersService.logout();
-    ctx.patchState({
-      logoutUser: true,
-      userResponse: null,
-      loginError: '',
-    });
   }
 
   @Action(EnrollUser)
@@ -134,7 +82,7 @@ export class UsersState {
         });
         throw throwError(() => new Error(err));
       }),
-      tap((response: UserEnrollInfoResponse) =>
+      tap((response) =>
         ctx.patchState({
           userDisenrollResponse: { ...response },
         })
@@ -144,7 +92,7 @@ export class UsersState {
 
   @Action(GetCurrentUser)
   getCurrentUser(ctx: StateContext<UsersStateModel>, action: GetCurrentUser) {
-    return this.usersService.getUserById().pipe(
+    return this.usersService.getCurrentUser().pipe(
       catchError((err: string) => {
         ctx.patchState({
           getUserError: err,
@@ -153,7 +101,7 @@ export class UsersState {
       }),
       tap((userResponse: UserDTO) => {
         ctx.patchState({
-          userResponse: userResponse
+          userResponse: userResponse,
         });
       })
     );

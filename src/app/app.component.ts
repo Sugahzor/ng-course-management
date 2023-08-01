@@ -5,7 +5,7 @@ import { Select } from '@ngxs/store';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { EN_LANG } from './core/constants.model';
 import { BaseComponent } from './core/shared/base/base.component';
-import { UsersState } from './redux/users.state';
+import { AuthState } from './redux/auth.state';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,7 @@ import { UsersState } from './redux/users.state';
 })
 export class AppComponent extends BaseComponent implements OnInit {
   title = 'ng-course-management';
-  @Select(UsersState.logoutUser) logoutUser$: Observable<boolean>;
+  @Select(AuthState.isLoggedIn) isLoggedIn$: Observable<boolean>;
 
   constructor(private translate: TranslateService, private router: Router) {
     super();
@@ -22,9 +22,9 @@ export class AppComponent extends BaseComponent implements OnInit {
   }
 
   override ngOnInit(): void {
-    this.logoutUser$
+    this.isLoggedIn$
       .pipe(
-        filter((value: any) => value === true),
+        filter((value: any) => !value),
         takeUntil(this.unsubscribe$)
       )
       .subscribe(() => this.router.navigate(['/login']));

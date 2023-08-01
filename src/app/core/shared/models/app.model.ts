@@ -1,6 +1,10 @@
-export interface LoginData {
-  userEmail: string;
+export interface LoginRequestPayload {
+  userName: string;
   userPassword: string;
+}
+
+export interface LoginResponse {
+  jwt: string;
 }
 
 export interface UserDTO {

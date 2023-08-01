@@ -2,9 +2,9 @@
   <mat-card>
     <form [formGroup]="loginForm" autocomplete="off">
       <mat-form-field>
-          <mat-label>{{ 'login.email' | translate }}</mat-label>
-          <input type="email" formControlName="email" matInput autofocus required (keydown.enter)="onEnter($event)">
-          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">{{ 'login.emailRequired' | translate }}
+          <mat-label>{{ 'login.username' | translate }}</mat-label>
+          <input type="text" formControlName="username" matInput autofocus required (keydown.enter)="onEnter($event)">
+          <mat-error *ngIf="loginForm.get('username')?.hasError('required')">{{ 'login.usernameRequired' | translate }}
           </mat-error>
       </mat-form-field>
       <mat-form-field>

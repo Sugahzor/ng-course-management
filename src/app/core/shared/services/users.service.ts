@@ -28,7 +28,7 @@ export class UsersService {
   }
 
   disenrollUser(courseId: number): Observable<UserEnrollInfoResponse> {
-    return this.http.post<UserEnrollInfoResponse>(
+    return this.http.get<UserEnrollInfoResponse>(
       `${this.FULL_USERS_URL}/disenroll/${courseId}`,
       {
         headers: {

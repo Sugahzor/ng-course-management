@@ -1,7 +1,6 @@
 import {
   UserEnrollInfoResponse,
   UserDTO,
-  UserEnroll,
 } from '../core/shared/models/app.model';
 
 export interface UsersStateModel {
@@ -15,12 +14,12 @@ export interface UsersStateModel {
 
 export class EnrollUser {
   static readonly type = '[Users] Enroll User';
-  constructor(public userEnroll: UserEnroll) {}
+  constructor(public courseId: number) {}
 }
 
 export class DisenrollUser {
   static readonly type = '[Users] Disenroll User';
-  constructor(public userEnroll: UserEnroll) {}
+  constructor(public courseId: number) {}
 }
 
 export class GetCurrentUser {

@@ -4,11 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { USERS_URL } from '../../constants.model';
-import {
-  UserEnrollInfoResponse,
-  UserDTO,
-  UserEnroll,
-} from '../models/app.model';
+import { UserEnrollInfoResponse, UserDTO } from '../models/app.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,17 +16,25 @@ export class UsersService {
 
   constructor(private http: HttpClient, private cookieService: CookieService) {}
 
-  enrollUser(userEnroll: UserEnroll): Observable<UserEnrollInfoResponse> {
-    return this.http.post<UserEnrollInfoResponse>(
-      `${this.FULL_USERS_URL}/enroll`,
-      userEnroll
+  enrollUser(courseId: number): Observable<UserEnrollInfoResponse> {
+    return this.http.get<UserEnrollInfoResponse>(
+      `${this.FULL_USERS_URL}/enroll/${courseId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.cookieService.get('accessToken')}`,
+        },
+      }
     );
   }
 
-  disenrollUser(userEnroll: UserEnroll): Observable<UserEnrollInfoResponse> {
+  disenrollUser(courseId: number): Observable<UserEnrollInfoResponse> {
     return this.http.post<UserEnrollInfoResponse>(
-      `${this.FULL_USERS_URL}/disenroll`,
-      userEnroll
+      `${this.FULL_USERS_URL}/disenroll/${courseId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.cookieService.get('accessToken')}`,
+        },
+      }
     );
   }
 

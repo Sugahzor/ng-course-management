@@ -12,16 +12,19 @@ import { AuthState } from '../redux/auth.state';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent extends BaseComponent implements OnInit {
-  isLoggedIn: boolean;
+export class HeaderComponent extends BaseComponent implements OnInit{
   @Select(AuthState.isLoggedIn) isLoggedIn$: Observable<boolean>;
-
-  constructor(private store: Store, private router: Router) {
+  
+  constructor(
+    private store: Store,
+    private router: Router,
+    private cookieService: CookieService
+  ) {
     super();
   }
 
   override ngOnInit(): void {
-    this.initIsLoggedIn();
+      this.initIsLoggedIn();
   }
 
   logoutUser() {
@@ -32,17 +35,19 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     this.router.navigate(['/dashboard']);
   }
 
+  isLoggedIn(): boolean {
+    return !!this.cookieService.get('isLoggedIn');
+  }
+
   private initIsLoggedIn() {
     this.isLoggedIn$
       .pipe(
-        filter((value) => value !== null),
+        filter((value) => value === false),
         takeUntil(this.unsubscribe$)
       )
-      .subscribe((isLoggedIn) => {
-        this.isLoggedIn = isLoggedIn;
-        if (!isLoggedIn) {
-          this.router.navigate(['/login']);
-        }
+      .subscribe(() => {
+        //needed for cookies cleanup
+        window.location.reload();
       });
   }
 }

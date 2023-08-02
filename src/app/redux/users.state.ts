@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { CookieService } from 'ngx-cookie-service';
 import { throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { UserDTO } from '../core/shared/models/app.model';
@@ -24,7 +25,10 @@ import {
 })
 @Injectable()
 export class UsersState {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private cookieService: CookieService
+  ) {}
 
   @Selector()
   static userResponse(state: UsersStateModel) {
@@ -58,7 +62,7 @@ export class UsersState {
 
   @Action(EnrollUser)
   enrollUser(ctx: StateContext<UsersStateModel>, action: EnrollUser) {
-    return this.usersService.enrollUser(action.userEnroll).pipe(
+    return this.usersService.enrollUser(action.courseId).pipe(
       catchError((err: string) => {
         ctx.patchState({
           userEnrollError: err,
@@ -75,7 +79,7 @@ export class UsersState {
 
   @Action(DisenrollUser)
   disenrollUser(ctx: StateContext<UsersStateModel>, action: DisenrollUser) {
-    return this.usersService.disenrollUser(action.userEnroll).pipe(
+    return this.usersService.disenrollUser(action.courseId).pipe(
       catchError((err: string) => {
         ctx.patchState({
           userDisenrollError: err,
@@ -100,6 +104,7 @@ export class UsersState {
         throw throwError(() => new Error(err));
       }),
       tap((userResponse: UserDTO) => {
+        this.cookieService.set('userRole', userResponse.userRole.toUpperCase());
         ctx.patchState({
           userResponse: userResponse,
         });

@@ -44,6 +44,10 @@ export class AuthState {
           'accessToken',
           loginResponse.jwt?.toString() as string
         );
+        this.cookieService.set(
+            'isLoggedIn',
+            'true'
+        )
         ctx.patchState({
           isLoggedIn: true,
           loginError: '',
@@ -55,6 +59,8 @@ export class AuthState {
   @Action(LogoutUser)
   logoutUser(ctx: StateContext<AuthStateModel>) {
     this.cookieService.delete('accessToken');
+    this.cookieService.delete('userRole');
+    this.cookieService.delete('isLoggedIn');
     ctx.patchState({
       isLoggedIn: false,
     });

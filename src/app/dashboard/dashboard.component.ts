@@ -73,11 +73,11 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   }
 
   isUserProfessor() {
-    return this.cookieService.get('userRole').toUpperCase() === PROFESSOR;
+    return this.userData?.userRole?.toUpperCase() === PROFESSOR;
   }
 
   isUserStudent() {
-    return this.cookieService.get('userRole').toUpperCase() === STUDENT;
+    return this.userData?.userRole?.toUpperCase() === STUDENT;
   }
 
   isUserEnrolled(courseIdToCheck: number) {
@@ -88,19 +88,13 @@ export class DashboardComponent extends BaseComponent implements OnInit {
 
   enrollUser(courseId: number) {
     this.store.dispatch(
-      new EnrollUser({
-        userId: parseInt(this.cookieService.get('userId')),
-        courseId: courseId,
-      })
+      new EnrollUser(courseId)
     );
   }
 
   disenrollUser(courseId: number) {
     this.store.dispatch(
-      new DisenrollUser({
-        userId: this.userData.id as number,
-        courseId: courseId,
-      })
+      new DisenrollUser(courseId)
     );
   }
 

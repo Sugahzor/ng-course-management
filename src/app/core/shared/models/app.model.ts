@@ -46,13 +46,7 @@ export interface SaveCourseRequest {
   userId: number;
 }
 
-export interface UserEnroll {
-  userId: number;
-  courseId: number;
-}
-
 export interface UserEnrollInfoResponse {
-  userId: number;
   courseId: number;
   enrolled: boolean;
 }

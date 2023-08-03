@@ -48,6 +48,11 @@ export class SaveCourse {
   constructor(public course: SaveCourseRequest) {}
 }
 
+export class ClearSaveCourse {
+  static readonly type = '[Courses] Save Course Cleanup';
+  constructor() {}
+}
+
 export class DeleteCourse {
   static readonly type = '[Courses] Delete Course';
   constructor(public courseId: number) {}

@@ -43,7 +43,6 @@ export interface CurriculumCreationDTO {
 export interface SaveCourseRequest {
   name: string;
   imageUrl: string;
-  userId: number;
 }
 
 export interface UserEnrollInfoResponse {

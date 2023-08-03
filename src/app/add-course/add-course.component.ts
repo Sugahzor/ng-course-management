@@ -6,7 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { CourseDTO, SaveCourseRequest } from '../core/shared/models/app.model';
-import { SaveCourse } from '../redux/courses.actions';
+import { ClearSaveCourse, SaveCourse } from '../redux/courses.actions';
 import { CoursesState } from '../redux/courses.state';
 
 @Component({
@@ -45,7 +45,6 @@ export class AddCourseComponent extends BaseComponent implements OnInit {
     let course: SaveCourseRequest = {
       name: this.addCourseForm.get('courseName')?.value,
       imageUrl: this.addCourseForm.get('courseImageUrl')?.value,
-      userId: parseInt(this.cookieService.get('userId')),
     };
     this.store.dispatch(new SaveCourse(course));
   }
@@ -58,6 +57,7 @@ export class AddCourseComponent extends BaseComponent implements OnInit {
       )
       .subscribe((saveCourseResponse: CourseDTO) => {
         this.addCourseForm.reset();
+        this.store.dispatch(new ClearSaveCourse());
         this.router.navigate([`/course/${saveCourseResponse.courseId}`]);
       });
   }

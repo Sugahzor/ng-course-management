@@ -7,6 +7,7 @@ import {
   AddLessonsToCourse,
   ClearDeleteCourseResponse,
   ClearRemoveLessonResponse,
+  ClearSaveCourse,
   CoursesStateModel,
   DeleteCourse,
   GetCourseDetails,
@@ -161,7 +162,7 @@ export class CoursesState {
           });
           throw throwError(() => new Error(error));
         }),
-        tap((response: any) => {
+        tap(() => {
           ctx.patchState({
             removeLessonResponse: 'complete',
           });
@@ -191,6 +192,13 @@ export class CoursesState {
         })
       )
     );
+  }
+
+  @Action(ClearSaveCourse)
+  clearSaveCourse(ctx: StateContext<CoursesStateModel>) {
+    ctx.patchState({
+      saveCourseResponse: null,
+    });
   }
 
   @Action(DeleteCourse)

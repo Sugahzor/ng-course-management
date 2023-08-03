@@ -16,6 +16,10 @@ export class UsersService {
 
   constructor(private http: HttpClient, private cookieService: CookieService) {}
 
+  register() {
+    //implement
+  }
+
   enrollUser(courseId: number): Observable<UserEnrollInfoResponse> {
     return this.http.get<UserEnrollInfoResponse>(
       `${this.FULL_USERS_URL}/enroll/${courseId}`,

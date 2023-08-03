@@ -26,7 +26,7 @@ export interface LessonDTO {
   id?: number;
   name: string;
   content: string;
-  userId: number | string;
+  userId?: number | string;
   attendanceResponseDTO?: AttendanceResponseDTO;
 }
 

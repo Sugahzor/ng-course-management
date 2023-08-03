@@ -68,7 +68,6 @@ export class LessonsListComponent extends BaseComponent implements OnInit {
   }
 
   saveLesson() {
-    console.log('saveLesson called');
     if (this.addLessonForm.get('lessonName')?.pristine) {
       //TODO: add errrors in template
       this.addLessonForm.get('lessonName')?.setErrors({ required: true });
@@ -86,7 +85,6 @@ export class LessonsListComponent extends BaseComponent implements OnInit {
       name: formData.get('name') as string,
       // content: formData.get('content') as string,
       content: '4pyTIMOgIGxhIG1vZGU=',
-      userId: formData.get('userId') as string,
     };
     this.store.dispatch(new SaveLesson(lessonInfo));
   }

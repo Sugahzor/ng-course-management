@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { CookieService } from 'ngx-cookie-service';
 import { filter, Observable, takeUntil } from 'rxjs';
+import { LOGGED_OUT } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { LogoutUser } from '../redux/auth.actions';
 import { AuthState } from '../redux/auth.state';
@@ -12,19 +12,15 @@ import { AuthState } from '../redux/auth.state';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent extends BaseComponent implements OnInit{
-  @Select(AuthState.isLoggedIn) isLoggedIn$: Observable<boolean>;
-  
-  constructor(
-    private store: Store,
-    private router: Router,
-    private cookieService: CookieService
-  ) {
+export class HeaderComponent extends BaseComponent implements OnInit {
+  @Select(AuthState.loginState) loginState$: Observable<string>;
+
+  constructor(private store: Store, private router: Router) {
     super();
   }
 
   override ngOnInit(): void {
-      this.initIsLoggedIn();
+    this.initLoginState();
   }
 
   logoutUser() {
@@ -36,18 +32,17 @@ export class HeaderComponent extends BaseComponent implements OnInit{
   }
 
   isLoggedIn(): boolean {
-    return !!this.cookieService.get('isLoggedIn');
+    return !!localStorage.getItem('isLoggedIn');
   }
 
-  private initIsLoggedIn() {
-    this.isLoggedIn$
+  private initLoginState() {
+    this.loginState$
       .pipe(
-        filter((value) => value === false),
+        filter((value) => value === LOGGED_OUT),
         takeUntil(this.unsubscribe$)
       )
       .subscribe(() => {
-        //needed for cookies cleanup
-        window.location.reload();
+        this.router.navigate(['/login']);
       });
   }
 }

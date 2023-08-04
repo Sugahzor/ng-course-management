@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { CookieService } from 'ngx-cookie-service';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { CourseDTO, SaveCourseRequest } from '../core/shared/models/app.model';
@@ -24,7 +23,6 @@ export class AddCourseComponent extends BaseComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private cookieService: CookieService,
     private store: Store,
     private router: Router
   ) {

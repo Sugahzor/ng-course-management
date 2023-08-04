@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { COURSES_URL } from '../../constants.model';
@@ -17,7 +16,7 @@ export class CoursesService {
   private readonly ROOT_URL = environment.serviceUrlBase;
   private FULL_COURSES_URL = `${this.ROOT_URL}${COURSES_URL}`;
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  constructor(private http: HttpClient) {}
 
   getCourses(): Observable<CourseDTO[]> {
     return this.http.get<CourseDTO[]>(this.FULL_COURSES_URL);
@@ -31,8 +30,11 @@ export class CoursesService {
     return this.http.put<CourseDTO>(this.FULL_COURSES_URL, curriculum);
   }
 
-  removeLessonFromCourse(courseId: number, lessonId: number) {
-    return this.http.delete(
+  removeLessonFromCourse(
+    courseId: number,
+    lessonId: number
+  ): Observable<CourseDTO> {
+    return this.http.delete<CourseDTO>(
       `${this.FULL_COURSES_URL}/${courseId}/lessonId/${lessonId}`
     );
   }
@@ -40,7 +42,7 @@ export class CoursesService {
   saveCourse(course: SaveCourseRequest): Observable<CourseDTO> {
     return this.http.post<CourseDTO>(this.FULL_COURSES_URL, course, {
       headers: {
-        Authorization: `Bearer ${this.cookieService.get('accessToken')}`,
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     });
   }

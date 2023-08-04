@@ -1,8 +1,8 @@
 import { LoginRequestPayload } from '../core/shared/models/app.model';
 
 export interface AuthStateModel {
-    isLoggedIn: boolean | null;
-    loginError: string;
+  loginState: string;
+  loginError: string;
 }
 
 export class LoginUser {

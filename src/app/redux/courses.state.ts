@@ -6,7 +6,6 @@ import { CoursesService } from '../core/shared/services/courses.service';
 import {
   AddLessonsToCourse,
   ClearDeleteCourseResponse,
-  ClearRemoveLessonResponse,
   ClearSaveCourse,
   CoursesStateModel,
   DeleteCourse,
@@ -25,7 +24,7 @@ import {
     courseDetailsError: '',
     addLessonsResponse: null,
     addLessonsError: '',
-    removeLessonResponse: '',
+    removeLessonResponse: null,
     removeLessonError: '',
     saveCourseResponse: null,
     saveCourseError: '',
@@ -162,19 +161,12 @@ export class CoursesState {
           });
           throw throwError(() => new Error(error));
         }),
-        tap(() => {
+        tap((removeLessonResponse) => {
           ctx.patchState({
-            removeLessonResponse: 'complete',
+            removeLessonResponse: removeLessonResponse,
           });
         })
       );
-  }
-
-  @Action(ClearRemoveLessonResponse)
-  clearRemoveLessonResponse(ctx: StateContext<CoursesStateModel>) {
-    ctx.patchState({
-      removeLessonResponse: '',
-    });
   }
 
   @Action(SaveCourse)

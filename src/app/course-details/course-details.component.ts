@@ -9,7 +9,6 @@ import { CoursesState } from '../redux/courses.state';
 import {
   AddLessonsToCourse,
   ClearDeleteCourseResponse,
-  ClearRemoveLessonResponse,
   DeleteCourse,
   GetCourseDetails,
   RemoveLessonFromCourse,
@@ -20,7 +19,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PROFESSOR } from '../core/constants.model';
 import { GetLessons } from '../redux/lessons.actions';
 import { LessonsState } from '../redux/lessons.state';
-import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-course-details',
   templateUrl: './course-details.component.html',
@@ -37,8 +35,10 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
   courseDetailsError$: Observable<string>;
   @Select(LessonsState.saveLessonResponse)
   saveLessonResponse$: Observable<LessonDTO>;
+  @Select(CoursesState.addLessonsResponse)
+  addLessonsResponse$: Observable<CourseDTO>;
   @Select(CoursesState.removeLessonResponse)
-  removeLessonResponse$: Observable<string>;
+  removeLessonResponse$: Observable<CourseDTO>;
   @Select(CoursesState.removeLessonError)
   removeLessonError$: Observable<string>;
   @Select(CoursesState.deleteCourseResponse)
@@ -47,11 +47,12 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
   constructor(
     private store: Store,
     private route: ActivatedRoute,
-    private cookieService: CookieService,
     private router: Router
   ) {
     super();
   }
+
+  //TODO: when here, logout doesnt work
 
   override ngOnInit(): void {
     this.courseId = parseInt(this.route.snapshot.paramMap.get('id') as string);
@@ -62,10 +63,11 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
     this.initRemoveLessonResponse();
     this.initRemoveLessonError();
     this.initDeleteCourseResponse();
+    this.initAddLessonsResponse();
   }
 
   isUserProfessor(): boolean {
-    return this.cookieService.get('userRole') === PROFESSOR;
+    return localStorage.getItem('userRole') === PROFESSOR;
   }
 
   displayAllLessonsList() {
@@ -83,7 +85,6 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
       lessonIdList: [lessonId],
     };
     this.store.dispatch(new AddLessonsToCourse(curriculum));
-    window.location.reload();
   }
 
   removeLessonFromCourse(lessonId: number | null) {
@@ -138,12 +139,15 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
   private initRemoveLessonResponse() {
     this.removeLessonResponse$
       .pipe(
-        filter((value: any) => value !== ''),
+        filter((value: any) => value),
         takeUntil(this.unsubscribe$)
       )
-      .subscribe(() => {
-        this.store.dispatch(new ClearRemoveLessonResponse());
-        window.location.reload();
+      .subscribe((removeLessonResponse: CourseDTO) => {
+        this.courseDetails.lessonDTOList = [
+          ...removeLessonResponse.lessonDTOList,
+        ];
+        //TODO: Patch state instead of call?
+        this.store.dispatch(new GetLessons());
       });
   }
 
@@ -169,6 +173,21 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
       .subscribe(() => {
         this.store.dispatch(new ClearDeleteCourseResponse());
         this.router.navigate(['/dashboard']);
+      });
+  }
+
+  private initAddLessonsResponse() {
+    this.addLessonsResponse$
+      .pipe(
+        filter((value: any) => value),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((addLessonsResponse: CourseDTO) => {
+        this.courseDetails.lessonDTOList = [
+          ...addLessonsResponse.lessonDTOList,
+        ];
+        //TODO: Patch state instead of call?
+        this.store.dispatch(new GetLessons());
       });
   }
 }

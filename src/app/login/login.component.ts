@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { EN_LANG } from '../core/constants.model';
+import { EN_LANG, LOGGED_IN } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { UserDTO } from '../core/shared/models/app.model';
 import { LoginUser } from '../redux/auth.actions';
@@ -21,7 +21,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
   loginForm: FormGroup;
   userResponse: UserDTO;
 
-  @Select(AuthState.isLoggedIn) isLoggedIn$: Observable<boolean>;
+  @Select(AuthState.loginState) loginState$: Observable<string>;
   @Select(AuthState.loginError) loginError$: Observable<string>;
 
   constructor(
@@ -39,7 +39,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
   }
 
   override ngOnInit(): void {
-    this.initIsLoggedIn();
+    this.initLoginState();
     this.initLoginErrorResponse();
   }
 
@@ -68,9 +68,9 @@ export class LoginComponent extends BaseComponent implements OnInit {
     this.store.dispatch(new LoginUser(loginData));
   }
 
-  private initIsLoggedIn() {
-    this.isLoggedIn$
-      .pipe(filter((value: any) => value))
+  private initLoginState() {
+    this.loginState$
+      .pipe(filter((value: any) => value === LOGGED_IN))
       .subscribe(() => this.router.navigate(['/dashboard']));
   }
 

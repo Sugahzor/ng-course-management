@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LESSONS_URL } from '../../constants.model';
@@ -13,12 +12,12 @@ export class LessonsService {
   private readonly ROOT_URL = environment.serviceUrlBase;
   private readonly FULL_LESSONS_URL = `${this.ROOT_URL}${LESSONS_URL}`;
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  constructor(private http: HttpClient) {}
 
   getLessons(): Observable<LessonDTO[]> {
     return this.http.get<LessonDTO[]>(this.FULL_LESSONS_URL, {
       headers: {
-        Authorization: `Bearer ${this.cookieService.get('accessToken')}`,
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     });
   }
@@ -26,7 +25,7 @@ export class LessonsService {
   saveLesson(lessonInfo: LessonDTO): Observable<LessonDTO> {
     return this.http.post<LessonDTO>(this.FULL_LESSONS_URL, lessonInfo, {
       headers: {
-        Authorization: `Bearer ${this.cookieService.get('accessToken')}`,
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     });
   }

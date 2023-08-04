@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { CookieService } from 'ngx-cookie-service';
 import { catchError, tap, throwError } from 'rxjs';
+import { LOGGED_IN, LOGGED_OUT } from '../core/constants.model';
 import { LoginResponse } from '../core/shared/models/app.model';
 import { AuthService } from '../core/shared/services/auth.service';
 import { AuthStateModel, LoginUser, LogoutUser } from './auth.actions';
@@ -9,20 +9,17 @@ import { AuthStateModel, LoginUser, LogoutUser } from './auth.actions';
 @State<AuthStateModel>({
   name: 'auth',
   defaults: {
-    isLoggedIn: null,
+    loginState: '',
     loginError: '',
   },
 })
 @Injectable()
 export class AuthState {
-  constructor(
-    private authService: AuthService,
-    private cookieService: CookieService
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Selector()
-  static isLoggedIn(state: AuthStateModel) {
-    return state.isLoggedIn;
+  static loginState(state: AuthStateModel) {
+    return state.loginState;
   }
 
   @Selector()
@@ -40,16 +37,13 @@ export class AuthState {
         throw throwError(() => new Error(err));
       }),
       tap((loginResponse: LoginResponse) => {
-        this.cookieService.set(
+        localStorage.setItem(
           'accessToken',
           loginResponse.jwt?.toString() as string
         );
-        this.cookieService.set(
-            'isLoggedIn',
-            'true'
-        )
+        localStorage.setItem('isLoggedIn', 'true');
         ctx.patchState({
-          isLoggedIn: true,
+          loginState: LOGGED_IN,
           loginError: '',
         });
       })
@@ -58,11 +52,9 @@ export class AuthState {
 
   @Action(LogoutUser)
   logoutUser(ctx: StateContext<AuthStateModel>) {
-    this.cookieService.delete('accessToken');
-    this.cookieService.delete('userRole');
-    this.cookieService.delete('isLoggedIn');
+    localStorage.clear();
     ctx.patchState({
-      isLoggedIn: false,
+      loginState: LOGGED_OUT,
     });
   }
 }

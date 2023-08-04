@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { CookieService } from 'ngx-cookie-service';
 import { throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { UserDTO } from '../core/shared/models/app.model';
@@ -25,10 +24,7 @@ import {
 })
 @Injectable()
 export class UsersState {
-  constructor(
-    private usersService: UsersService,
-    private cookieService: CookieService
-  ) {}
+  constructor(private usersService: UsersService) {}
 
   @Selector()
   static userResponse(state: UsersStateModel) {
@@ -104,7 +100,7 @@ export class UsersState {
         throw throwError(() => new Error(err));
       }),
       tap((userResponse: UserDTO) => {
-        this.cookieService.set('userRole', userResponse.userRole.toUpperCase());
+        localStorage.setItem('userRole', userResponse.userRole.toUpperCase());
         ctx.patchState({
           userResponse: userResponse,
         });

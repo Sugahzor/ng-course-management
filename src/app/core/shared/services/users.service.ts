@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { USERS_URL } from '../../constants.model';
@@ -14,7 +13,7 @@ export class UsersService {
   private readonly FULL_USERS_URL = `${this.ROOT_URL}${USERS_URL}`;
   accessToken: string;
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  constructor(private http: HttpClient) {}
 
   register() {
     //implement
@@ -25,7 +24,7 @@ export class UsersService {
       `${this.FULL_USERS_URL}/enroll/${courseId}`,
       {
         headers: {
-          Authorization: `Bearer ${this.cookieService.get('accessToken')}`,
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
       }
     );
@@ -36,7 +35,7 @@ export class UsersService {
       `${this.FULL_USERS_URL}/disenroll/${courseId}`,
       {
         headers: {
-          Authorization: `Bearer ${this.cookieService.get('accessToken')}`,
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
       }
     );
@@ -45,7 +44,7 @@ export class UsersService {
   getCurrentUser(): Observable<UserDTO> {
     return this.http.get<UserDTO>(`${this.FULL_USERS_URL}/info`, {
       headers: {
-        Authorization: `Bearer ${this.cookieService.get('accessToken')}`,
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     });
   }

@@ -13,7 +13,6 @@ import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 
 import { appStates } from './redux/app.state';
-import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [AppComponent, FooterComponent, HeaderComponent],
@@ -24,9 +23,8 @@ import { CookieService } from 'ngx-cookie-service';
     SharedModule,
     AppRoutingModule,
     NgxsModule.forRoot(appStates),
-    NgxsLoggerPluginModule.forRoot()
+    NgxsLoggerPluginModule.forRoot(),
   ],
-  providers: [CookieService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

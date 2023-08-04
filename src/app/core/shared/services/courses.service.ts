@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { COURSES_URL } from '../../constants.model';
+import { ACCESS_TOKEN, COURSES_URL } from '../../constants.model';
 import {
   CourseDTO,
   CurriculumCreationDTO,
@@ -42,7 +42,7 @@ export class CoursesService {
   saveCourse(course: SaveCourseRequest): Observable<CourseDTO> {
     return this.http.post<CourseDTO>(this.FULL_COURSES_URL, course, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
       },
     });
   }

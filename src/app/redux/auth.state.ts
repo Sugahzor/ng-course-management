@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap, throwError } from 'rxjs';
-import { LOGGED_IN, LOGGED_OUT } from '../core/constants.model';
+import { ACCESS_TOKEN, LOGGED_IN, LOGGED_OUT } from '../core/constants.model';
 import { LoginResponse } from '../core/shared/models/app.model';
 import { AuthService } from '../core/shared/services/auth.service';
 import { AuthStateModel, LoginUser, LogoutUser } from './auth.actions';
@@ -38,7 +38,7 @@ export class AuthState {
       }),
       tap((loginResponse: LoginResponse) => {
         localStorage.setItem(
-          'accessToken',
+          ACCESS_TOKEN,
           loginResponse.jwt?.toString() as string
         );
         localStorage.setItem('isLoggedIn', 'true');

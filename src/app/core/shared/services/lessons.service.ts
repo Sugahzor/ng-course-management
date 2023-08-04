@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { LESSONS_URL } from '../../constants.model';
+import { ACCESS_TOKEN, LESSONS_URL } from '../../constants.model';
 import { LessonDTO } from '../models/app.model';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class LessonsService {
   getLessons(): Observable<LessonDTO[]> {
     return this.http.get<LessonDTO[]>(this.FULL_LESSONS_URL, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
       },
     });
   }
@@ -25,7 +25,7 @@ export class LessonsService {
   saveLesson(lessonInfo: LessonDTO): Observable<LessonDTO> {
     return this.http.post<LessonDTO>(this.FULL_LESSONS_URL, lessonInfo, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
       },
     });
   }

@@ -9,5 +9,7 @@ export const LESSONS_URL = 'api/v1/lessons';
 export const PROFESSOR = 'PROFESSOR';
 export const STUDENT = 'STUDENT';
 
+export const ACCESS_TOKEN = 'accessToken';
+
 export const LOGGED_IN = 'loggedIn';
 export const LOGGED_OUT = 'loggedOut';

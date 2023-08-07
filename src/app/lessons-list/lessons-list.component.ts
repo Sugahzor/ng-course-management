@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import { CookieService } from 'ngx-cookie-service';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { CourseDTO, LessonDTO, UserDTO } from '../core/shared/models/app.model';
@@ -38,11 +37,7 @@ export class LessonsListComponent extends BaseComponent implements OnInit {
   @Select(LessonsState.deleteLessonResponse)
   deleteLessonResponse$: Observable<string>;
 
-  constructor(
-    private fb: FormBuilder,
-    private cookieService: CookieService,
-    private store: Store
-  ) {
+  constructor(private fb: FormBuilder, private store: Store) {
     super();
     this.addLessonForm = this.fb.group({
       lessonName: new FormControl(''),
@@ -68,7 +63,6 @@ export class LessonsListComponent extends BaseComponent implements OnInit {
   }
 
   saveLesson() {
-    console.log('saveLesson called');
     if (this.addLessonForm.get('lessonName')?.pristine) {
       //TODO: add errrors in template
       this.addLessonForm.get('lessonName')?.setErrors({ required: true });
@@ -81,12 +75,10 @@ export class LessonsListComponent extends BaseComponent implements OnInit {
     const formData = new FormData();
     formData.append('name', this.addLessonForm.get('lessonName')?.value);
     formData.append('content', this.lessonContent);
-    formData.append('userId', this.cookieService.get('userId'));
     let lessonInfo: LessonDTO = {
       name: formData.get('name') as string,
       // content: formData.get('content') as string,
       content: '4pyTIMOgIGxhIG1vZGU=',
-      userId: formData.get('userId') as string,
     };
     this.store.dispatch(new SaveLesson(lessonInfo));
   }

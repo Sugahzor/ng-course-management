@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { CookieService } from 'ngx-cookie-service';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { PROFESSOR, STUDENT } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
@@ -47,11 +46,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   @Select(UsersState.getUserError)
   getUserError$: Observable<string>;
 
-  constructor(
-    private store: Store,
-    private router: Router,
-    private cookieService: CookieService
-  ) {
+  constructor(private store: Store, private router: Router) {
     super();
     this.store.dispatch(new GetCourses());
   }
@@ -73,11 +68,11 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   }
 
   isUserProfessor() {
-    return this.cookieService.get('userRole').toUpperCase() === PROFESSOR;
+    return this.userData?.userRole?.toUpperCase() === PROFESSOR;
   }
 
   isUserStudent() {
-    return this.cookieService.get('userRole').toUpperCase() === STUDENT;
+    return this.userData?.userRole?.toUpperCase() === STUDENT;
   }
 
   isUserEnrolled(courseIdToCheck: number) {
@@ -87,21 +82,11 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   }
 
   enrollUser(courseId: number) {
-    this.store.dispatch(
-      new EnrollUser({
-        userId: parseInt(this.cookieService.get('userId')),
-        courseId: courseId,
-      })
-    );
+    this.store.dispatch(new EnrollUser(courseId));
   }
 
   disenrollUser(courseId: number) {
-    this.store.dispatch(
-      new DisenrollUser({
-        userId: this.userData.id as number,
-        courseId: courseId,
-      })
-    );
+    this.store.dispatch(new DisenrollUser(courseId));
   }
 
   addNewCourse() {

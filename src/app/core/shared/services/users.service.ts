@@ -1,15 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { USERS_URL } from '../../constants.model';
-import {
-  LoginData,
-  UserEnrollInfoResponse,
-  UserDTO,
-  UserEnroll,
-} from '../models/app.model';
+import { ACCESS_TOKEN, USERS_URL } from '../../constants.model';
+import { UserEnrollInfoResponse, UserDTO } from '../models/app.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,29 +12,39 @@ export class UsersService {
   private readonly ROOT_URL = environment.serviceUrlBase;
   private readonly FULL_USERS_URL = `${this.ROOT_URL}${USERS_URL}`;
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  constructor(private http: HttpClient) {}
 
-  login(loginData: LoginData): Observable<UserDTO> {
-    return this.http.post<UserDTO>(`${this.FULL_USERS_URL}/login`, loginData);
+  register() {
+    //implement
   }
 
-  logout() {
-    this.cookieService.delete('userId');
-    this.cookieService.delete('userRole');
-  }
-
-  enrollUser(userEnroll: UserEnroll): Observable<UserEnrollInfoResponse> {
-    return this.http.post<UserEnrollInfoResponse>(
-      `${this.FULL_USERS_URL}/enroll`,
-      userEnroll
+  enrollUser(courseId: number): Observable<UserEnrollInfoResponse> {
+    return this.http.get<UserEnrollInfoResponse>(
+      `${this.FULL_USERS_URL}/enroll/${courseId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+        },
+      }
     );
   }
 
-  disenrollUser(userEnroll: UserEnroll): Observable<UserEnrollInfoResponse> {
-    return this.http.post<UserEnrollInfoResponse>(`${this.FULL_USERS_URL}/disenroll`, userEnroll);
+  disenrollUser(courseId: number): Observable<UserEnrollInfoResponse> {
+    return this.http.get<UserEnrollInfoResponse>(
+      `${this.FULL_USERS_URL}/disenroll/${courseId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+        },
+      }
+    );
   }
 
-  getUserById(): Observable<UserDTO> {
-    return this.http.get<UserDTO>(`${this.FULL_USERS_URL}/${this.cookieService.get('userId')}`);
+  getCurrentUser(): Observable<UserDTO> {
+    return this.http.get<UserDTO>(`${this.FULL_USERS_URL}/info`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+      },
+    });
   }
 }

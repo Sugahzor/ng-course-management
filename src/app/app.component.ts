@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Select } from '@ngxs/store';
-import { filter, Observable, takeUntil } from 'rxjs';
 import { EN_LANG } from './core/constants.model';
 import { BaseComponent } from './core/shared/base/base.component';
-import { UsersState } from './redux/users.state';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +11,6 @@ import { UsersState } from './redux/users.state';
 })
 export class AppComponent extends BaseComponent implements OnInit {
   title = 'ng-course-management';
-  @Select(UsersState.logoutUser) logoutUser$: Observable<boolean>;
 
   constructor(private translate: TranslateService, private router: Router) {
     super();
@@ -22,11 +18,8 @@ export class AppComponent extends BaseComponent implements OnInit {
   }
 
   override ngOnInit(): void {
-    this.logoutUser$
-      .pipe(
-        filter((value: any) => value === true),
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe(() => this.router.navigate(['/login']));
+    if (!localStorage.getItem('isLoggedIn')) {
+      this.router.navigate(['/login']);
+    }
   }
 }

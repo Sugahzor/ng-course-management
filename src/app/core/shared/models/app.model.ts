@@ -1,6 +1,10 @@
-export interface LoginData {
-  userEmail: string;
+export interface LoginRequestPayload {
+  userName: string;
   userPassword: string;
+}
+
+export interface LoginResponse {
+  jwt: string;
 }
 
 export interface UserDTO {
@@ -22,7 +26,7 @@ export interface LessonDTO {
   id?: number;
   name: string;
   content: string;
-  userId: number | string;
+  userId?: number | string;
   attendanceResponseDTO?: AttendanceResponseDTO;
 }
 
@@ -39,16 +43,9 @@ export interface CurriculumCreationDTO {
 export interface SaveCourseRequest {
   name: string;
   imageUrl: string;
-  userId: number;
-}
-
-export interface UserEnroll {
-  userId: number;
-  courseId: number;
 }
 
 export interface UserEnrollInfoResponse {
-  userId: number;
   courseId: number;
   enrolled: boolean;
 }

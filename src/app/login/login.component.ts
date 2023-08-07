@@ -3,14 +3,13 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
-import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { EN_LANG } from '../core/constants.model';
+import { EN_LANG, LOGGED_IN } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { UserDTO } from '../core/shared/models/app.model';
-import { LoginUser } from '../redux/users.actions';
-import { UsersState } from '../redux/users.state';
+import { LoginUser } from '../redux/auth.actions';
+import { AuthState } from '../redux/auth.state';
 
 @Component({
   selector: 'app-login',
@@ -22,27 +21,25 @@ export class LoginComponent extends BaseComponent implements OnInit {
   loginForm: FormGroup;
   userResponse: UserDTO;
 
-  @Select(UsersState.userResponse) userResponse$: Observable<UserDTO>;
-  @Select(UsersState.loginError) loginError$: Observable<string>;
+  @Select(AuthState.loginState) loginState$: Observable<string>;
+  @Select(AuthState.loginError) loginError$: Observable<string>;
 
   constructor(
     private translate: TranslateService,
     private fb: FormBuilder,
     private store: Store,
-    private router: Router,
-    private cookieService: CookieService,
-    
+    private router: Router
   ) {
     super();
     this.translate.setDefaultLang(EN_LANG);
     this.loginForm = this.fb.group({
-      email: new FormControl(''),
+      username: new FormControl(''),
       password: new FormControl(''),
     });
   }
 
   override ngOnInit(): void {
-    this.initAuthorizationResponse();
+    this.initLoginState();
     this.initLoginErrorResponse();
   }
 
@@ -55,8 +52,8 @@ export class LoginComponent extends BaseComponent implements OnInit {
   }
 
   loginUser() {
-    if (this.loginForm.get('email')?.pristine) {
-      this.loginForm.get('email')?.setErrors({ required: true });
+    if (this.loginForm.get('username')?.pristine) {
+      this.loginForm.get('username')?.setErrors({ required: true });
     }
     if (this.loginForm.get('password')?.pristine) {
       this.loginForm.get('password')?.setErrors({ required: true });
@@ -65,27 +62,16 @@ export class LoginComponent extends BaseComponent implements OnInit {
       return;
     }
     let loginData = {
-      userEmail: this.loginForm.value.email.trim(),
+      userName: this.loginForm.value.username.trim(),
       userPassword: this.loginForm.value.password.trim(),
     };
     this.store.dispatch(new LoginUser(loginData));
   }
 
-  private initAuthorizationResponse() {
-    this.userResponse$
-      .pipe(filter((value: any) => value !== null && value !== undefined))
-      .subscribe((userResponse) => {
-        this.userResponse = userResponse;
-        this.cookieService.set(
-          'userId',
-          this.userResponse.id?.toString() as string
-        );
-        this.cookieService.set(
-          'userRole',
-          this.userResponse.userRole?.toString() as string
-        );
-        this.router.navigate(['/dashboard']);
-      });
+  private initLoginState() {
+    this.loginState$
+      .pipe(filter((value: any) => value === LOGGED_IN))
+      .subscribe(() => this.router.navigate(['/dashboard']));
   }
 
   private initLoginErrorResponse() {

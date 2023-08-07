@@ -11,7 +11,7 @@ export interface CoursesStateModel {
   courseDetailsError: string;
   addLessonsResponse: CourseDTO | null;
   addLessonsError: string;
-  removeLessonResponse: string;
+  removeLessonResponse: CourseDTO | null;
   removeLessonError: string;
   saveCourseResponse: CourseDTO | null;
   saveCourseError: string;
@@ -38,14 +38,14 @@ export class RemoveLessonFromCourse {
   constructor(public courseId: number, public lessonId: number) {}
 }
 
-export class ClearRemoveLessonResponse {
-  static readonly type = '[Courses] Remove Lesson Cleanup';
-  constructor() {}
-}
-
 export class SaveCourse {
   static readonly type = '[Courses] Save course';
   constructor(public course: SaveCourseRequest) {}
+}
+
+export class ClearSaveCourse {
+  static readonly type = '[Courses] Save Course Cleanup';
+  constructor() {}
 }
 
 export class DeleteCourse {

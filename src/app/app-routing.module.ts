@@ -24,6 +24,8 @@ const routes: Routes = [
     loadChildren: () =>
       import('./add-course/add-course.module').then((m) => m.AddCourseModule),
   },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' },
 ];
 
 @NgModule({

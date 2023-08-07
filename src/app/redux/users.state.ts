@@ -9,6 +9,7 @@ import {
   EnrollUser,
   DisenrollUser,
   GetCurrentUser,
+  ClearCurrentUser,
 } from './users.actions';
 
 @State<UsersStateModel>({
@@ -103,8 +104,16 @@ export class UsersState {
         localStorage.setItem('userRole', userResponse.userRole.toUpperCase());
         ctx.patchState({
           userResponse: userResponse,
+          getUserError: '',
         });
       })
     );
+  }
+
+  @Action(ClearCurrentUser)
+  clearCurrentUser(ctx: StateContext<UsersStateModel>) {
+    ctx.patchState({
+      userResponse: null,
+    });
   }
 }

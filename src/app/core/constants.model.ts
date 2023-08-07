@@ -8,6 +8,7 @@ export const LESSONS_URL = 'api/v1/lessons';
 
 export const PROFESSOR = 'PROFESSOR';
 export const STUDENT = 'STUDENT';
+export const ADMIN = 'ADMIN';
 
 export const ACCESS_TOKEN = 'accessToken';
 

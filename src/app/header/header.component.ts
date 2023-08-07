@@ -6,6 +6,7 @@ import { LOGGED_OUT } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { LogoutUser } from '../redux/auth.actions';
 import { AuthState } from '../redux/auth.state';
+import { ClearCurrentUser } from '../redux/users.actions';
 
 @Component({
   selector: 'app-header',
@@ -25,6 +26,7 @@ export class HeaderComponent extends BaseComponent implements OnInit {
 
   logoutUser() {
     this.store.dispatch(new LogoutUser());
+    this.store.dispatch(new ClearCurrentUser());
   }
 
   goToDashboard() {

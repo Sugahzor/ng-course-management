@@ -1,37 +1,41 @@
 <div>
-  <div class="dashboard-content" *ngIf="courses && userData">
-    <mat-card *ngFor="let course of courses">
-      <div class="course-info">
-        <mat-card-header>
-          {{ course.courseName }}
-        </mat-card-header>
-        <img mat-card-image [src]="course.imageUrl" />
+  <div class="dashboard-content" *ngIf="currentUser$ | async as user">
+    <div *ngIf="user.userRole !== ADMIN_ROLE">
+      <div *ngIf="coursesResponse$ | async as courses">
+        <mat-card *ngFor="let course of courses">
+          <div class="course-info">
+            <mat-card-header>
+              {{ course.courseName }}
+            </mat-card-header>
+            <img mat-card-image [src]="course.imageUrl" />
+          </div>
+          <div class="course-content">
+            <mat-card-content>
+              <p>Course description required</p>
+              <button mat-button [routerLink]="['/course', course.courseId]">
+                Curriculum details
+              </button>
+              <button
+                *ngIf="isUserStudent() && !isUserEnrolled(course.courseId)"
+                mat-button
+                (click)="enrollUser(course.courseId)"
+              >
+                Enroll in course
+              </button>
+              <button
+                *ngIf="isUserStudent() && isUserEnrolled(course.courseId)"
+                mat-button
+                (click)="disenrollUser(course.courseId)"
+              >
+                Disenroll from course
+              </button>
+            </mat-card-content>
+          </div>
+        </mat-card>
       </div>
-      <div class="course-content">
-        <mat-card-content>
-          <p>Course description required</p>
-          <button mat-button [routerLink]="['/course', course.courseId]">
-            Curriculum details
-          </button>
-          <button
-            *ngIf="isUserStudent() && !isUserEnrolled(course.courseId)"
-            mat-button
-            (click)="enrollUser(course.courseId)"
-          >
-            Enroll in course
-          </button>
-          <button
-            *ngIf="isUserStudent() && isUserEnrolled(course.courseId)"
-            mat-button
-            (click)="disenrollUser(course.courseId)"
-          >
-            Disenroll from course
-          </button>
-        </mat-card-content>
-      </div>
-    </mat-card>
+      <button *ngIf="isUserProfessor()" mat-button (click)="addNewCourse()">
+        Add New Course
+      </button>
+    </div>
   </div>
-  <button *ngIf="isUserProfessor()" mat-button (click)="addNewCourse()">
-    Add New Course
-  </button>
 </div>

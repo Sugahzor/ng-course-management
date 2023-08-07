@@ -26,3 +26,8 @@ export class GetCurrentUser {
   static readonly type = '[Users] Get User By Id';
   constructor() {}
 }
+
+export class ClearCurrentUser {
+  static readonly type = '[Users] Clear Current User Data';
+  constructor() {}
+}

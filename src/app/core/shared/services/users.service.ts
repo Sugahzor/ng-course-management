@@ -18,6 +18,22 @@ export class UsersService {
     //implement
   }
 
+  getCurrentUser(): Observable<UserDTO> {
+    return this.http.get<UserDTO>(`${this.FULL_USERS_URL}/info`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+      },
+    });
+  }
+
+  getAllUsers(): Observable<UserDTO[]> {
+    return this.http.get<UserDTO[]>(`${this.FULL_USERS_URL}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+      },
+    });
+  }
+
   enrollUser(courseId: number): Observable<UserEnrollInfoResponse> {
     return this.http.get<UserEnrollInfoResponse>(
       `${this.FULL_USERS_URL}/enroll/${courseId}`,
@@ -38,13 +54,5 @@ export class UsersService {
         },
       }
     );
-  }
-
-  getCurrentUser(): Observable<UserDTO> {
-    return this.http.get<UserDTO>(`${this.FULL_USERS_URL}/info`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
-      },
-    });
   }
 }

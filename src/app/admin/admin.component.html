@@ -1,1 +1,5 @@
-<p>admin works!</p>
+<div *ngIf="users$ | async as users">
+  <mat-card *ngFor="let user of users">
+    {{ user.userName }}
+  </mat-card>
+</div>

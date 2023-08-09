@@ -1,33 +1,45 @@
-<div class="course-details">
-  <div class="course-header">
-    <img [src]="courseDetails?.imageUrl" />
-    <h1>{{ courseDetails?.courseName }}</h1>
-    <button *ngIf="isUserProfessor()" (click)="deleteCourse()">
-      Delete Course
-    </button>
+<ngx-spinner
+  bdColor="rgb(48,213,200)"
+  size="medium"
+  color="#fff"
+  type="pacman"
+  [fullScreen]="true"
+>
+  <p style="color: white">Loading...</p>
+</ngx-spinner>
+<div *ngIf="courseDetails$ | async as courseDetails">
+  <div class="course-details">
+    <div class="course-header">
+      <img [src]="courseDetails.imageUrl" />
+      <h1>{{ courseDetails.courseName }}</h1>
+      <button *ngIf="isUserProfessor()" (click)="deleteCourse()">
+        Delete Course
+      </button>
+    </div>
+
+    <div class="lessons-list">
+      <ul *ngIf="courseDetails.lessonDTOList">
+        <li *ngFor="let lesson of courseDetails.lessonDTOList">
+          <p>{{ lesson.name }}</p>
+          <button
+            *ngIf="isUserProfessor()"
+            (click)="removeLessonFromCourse(lesson.id || null)"
+          >
+            Delete Lesson From Course
+          </button>
+        </li>
+      </ul>
+      <p *ngIf="!courseDetails.lessonDTOList">
+        No lessons for this course, please add some.
+      </p>
+    </div>
   </div>
 
-  <div class="lessons-list">
-    <ul *ngIf="courseDetails?.lessonDTOList">
-      <li *ngFor="let lesson of courseDetails.lessonDTOList">
-        <p>{{ lesson.name }}</p>
-        <button
-          *ngIf="isUserProfessor()"
-          (click)="removeLessonFromCourse(lesson.id || null)"
-        >
-          Delete Lesson From Course
-        </button>
-      </li>
-    </ul>
-    <p *ngIf="!courseDetails?.lessonDTOList">
-      No lessons for this course, please add some.
-    </p>
-  </div>
+  <button *ngIf="isUserProfessor()" (click)="displayAllLessonsList()">
+    Add More Lessons
+  </button>
 </div>
 
-<button *ngIf="isUserProfessor()" (click)="displayAllLessonsList()">
-  Add More Lessons
-</button>
 <app-lessons-list
   *ngIf="displayAvailableLessonList"
   [courseDetails]="courseDetails"

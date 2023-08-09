@@ -1,4 +1,13 @@
 <div>
+  <ngx-spinner
+    bdColor="rgb(48,213,200)"
+    size="medium"
+    color="#fff"
+    type="pacman"
+    [fullScreen]="true"
+  >
+    <p style="color: white">Loading...</p>
+  </ngx-spinner>
   <div class="dashboard-content" *ngIf="currentUser$ | async as user">
     <div *ngIf="user.userRole !== ADMIN_ROLE">
       <div *ngIf="coursesResponse$ | async as courses">

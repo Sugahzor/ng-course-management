@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { UserDTO } from '../core/shared/models/app.model';
@@ -20,11 +21,12 @@ export class AdminComponent extends BaseComponent implements OnInit {
   @Select(AdminState.users) users$: Observable<UserDTO[]>;
   @Select(AdminState.usersError) usersError$: Observable<string>;
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private spinner: NgxSpinnerService) {
     super();
   }
 
   override ngOnInit(): void {
+    this.spinner.show();
     this.store.dispatch(new GetAllUsers());
     this.initCurrentUser();
     this.initGetUserError();
@@ -63,7 +65,10 @@ export class AdminComponent extends BaseComponent implements OnInit {
         filter((value) => !!value),
         takeUntil(this.unsubscribe$)
       )
-      .subscribe((usersResponse) => (this.users = [...usersResponse]));
+      .subscribe((usersResponse) => {
+        this.spinner.hide();
+        this.users = [...usersResponse];
+      });
   }
 
   private initUsersError() {

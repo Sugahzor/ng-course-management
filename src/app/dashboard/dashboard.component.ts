@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { ADMIN, PROFESSOR, STUDENT } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
@@ -47,11 +48,16 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   @Select(UsersState.getUserError)
   getUserError$: Observable<string>;
 
-  constructor(private store: Store, private router: Router) {
+  constructor(
+    private store: Store,
+    private router: Router,
+    private spinner: NgxSpinnerService
+  ) {
     super();
   }
 
   override ngOnInit(): void {
+    this.spinner.show();
     this.store.dispatch(new GetCurrentUser());
     this.initLoginErrorResponse();
     this.initCurrentUser();
@@ -112,6 +118,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
         takeUntil(this.unsubscribe$)
       )
       .subscribe((currentUserResponse: UserDTO) => {
+        this.spinner.hide();
         if (currentUserResponse.userRole === ADMIN) {
           this.router.navigate(['/admin']);
         } else {

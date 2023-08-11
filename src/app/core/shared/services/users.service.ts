@@ -55,4 +55,16 @@ export class UsersService {
       }
     );
   }
+
+  updateUserRole(userId: number, newRole: string): Observable<UserDTO> {
+    return this.http.put<UserDTO>(
+      `${this.FULL_USERS_URL}/change/role`,
+      { userId, newRole },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+        },
+      }
+    );
+  }
 }

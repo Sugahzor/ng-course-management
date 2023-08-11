@@ -1,0 +1,44 @@
+.users-list {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 80vw;
+}
+mat-card {
+  margin-bottom: 20px;
+  width: 40%;
+  margin: 10px;
+  font-weight: 600;
+
+  .user-info {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid #c9c9c9;
+    color: #28282e;
+    p {
+      color: #092e2d;
+      color: #0e4946;
+    }
+  }
+  .role-selection {
+    display: flex;
+    flex-direction: column;
+    .btn__update {
+      align-self: flex-end;
+    }
+  }
+  .user {
+    &-admin {
+      background-color: #4dc1bb;
+    }
+    &-professor {
+      background-color: #a4dfdd;
+    }
+    &-student {
+      background-color: #daf1f1;
+    }
+    &-default {
+      background-color: #ededed;
+    }
+  }
+}

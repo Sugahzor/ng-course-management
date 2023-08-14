@@ -13,11 +13,6 @@ const routes: Routes = [
       import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
   {
-    path: 'admin',
-    loadChildren: () =>
-      import('./admin/admin.module').then((m) => m.AdminModule),
-  },
-  {
     path: 'course/:id',
     loadChildren: () =>
       import('./course-details/course-details.module').then(
@@ -28,6 +23,16 @@ const routes: Routes = [
     path: 'new-course',
     loadChildren: () =>
       import('./add-course/add-course.module').then((m) => m.AddCourseModule),
+  },
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./admin/admin.module').then((m) => m.AdminModule),
+  },
+  {
+    path: 'register',
+    loadChildren: () =>
+      import('./register/register.module').then((m) => m.RegisterModule),
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login', pathMatch: 'full' },

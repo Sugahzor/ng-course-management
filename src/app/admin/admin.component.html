@@ -8,11 +8,9 @@
   <p style="color: white">Loading...</p>
 </ngx-spinner>
 <div class="admin-container">
-  <mat-expansion-panel class="add-user">
-    <mat-expansion-panel-header>
-      <mat-panel-title> Add new User </mat-panel-title>
-    </mat-expansion-panel-header>
-  </mat-expansion-panel>
+  <button class="add-user" mat-button-raised [routerLink]="['/register']">
+    Add new User
+  </button>
   <div class="users-list" *ngIf="users$ | async as users">
     <mat-card *ngFor="let user of users">
       <mat-card-content

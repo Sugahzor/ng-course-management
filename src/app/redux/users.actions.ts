@@ -1,6 +1,7 @@
 import {
   UserEnrollInfoResponse,
   UserDTO,
+  RegisterUserDTO,
 } from '../core/shared/models/app.model';
 
 export interface UsersStateModel {
@@ -14,6 +15,8 @@ export interface UsersStateModel {
   userDisenrollError: string;
   userUpdated: UserDTO | null;
   userUpdatedError: string;
+  registerUser: UserDTO | null;
+  registerUserError: string;
 }
 
 export class GetAllUsers {
@@ -44,4 +47,9 @@ export class ClearCurrentUser {
 export class UpdateUserRole {
   static readonly type = '[Admin] Change User Role';
   constructor(public userId: number, public newRole: string) {}
+}
+
+export class RegisterUser {
+  static readonly type = '[Users] Register User';
+  constructor(public userInfo: RegisterUserDTO) {}
 }

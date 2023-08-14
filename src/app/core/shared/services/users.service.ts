@@ -3,7 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ACCESS_TOKEN, USERS_URL } from '../../constants.model';
-import { UserEnrollInfoResponse, UserDTO } from '../models/app.model';
+import {
+  UserEnrollInfoResponse,
+  UserDTO,
+  RegisterUserDTO,
+} from '../models/app.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +18,12 @@ export class UsersService {
 
   constructor(private http: HttpClient) {}
 
-  register() {
-    //implement
+  register(request: RegisterUserDTO): Observable<UserDTO> {
+    return this.http.post<UserDTO>(`${this.FULL_USERS_URL}`, request, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+      },
+    });
   }
 
   getCurrentUser(): Observable<UserDTO> {

@@ -12,6 +12,7 @@ import {
   ClearCurrentUser,
   UpdateUserRole,
   GetAllUsers,
+  RegisterUser,
 } from './users.actions';
 
 @State<UsersStateModel>({
@@ -27,6 +28,8 @@ import {
     userDisenrollError: '',
     userUpdated: null,
     userUpdatedError: '',
+    registerUser: null,
+    registerUserError: '',
   },
 })
 @Injectable()
@@ -81,6 +84,16 @@ export class UsersState {
   @Selector()
   static userUpdatedError(state: UsersStateModel) {
     return state.userUpdatedError;
+  }
+
+  @Selector()
+  static registerUser(state: UsersStateModel) {
+    return state.registerUser;
+  }
+
+  @Selector()
+  static registerUserError(state: UsersStateModel) {
+    return state.registerUserError;
   }
 
   @Action(GetCurrentUser)
@@ -182,6 +195,24 @@ export class UsersState {
           ],
         });
       })
+    );
+  }
+
+  @Action(RegisterUser)
+  registerUser(ctx: StateContext<UsersStateModel>, action: RegisterUser) {
+    return this.usersService.register(action.userInfo).pipe(
+      catchError((error: string) => {
+        ctx.patchState({
+          registerUserError: error,
+        });
+        throw throwError(() => new Error(error));
+      }),
+      tap((response) =>
+        ctx.patchState({
+          registerUser: response,
+          registerUserError: '',
+        })
+      )
     );
   }
 

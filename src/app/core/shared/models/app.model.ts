@@ -15,6 +15,12 @@ export interface UserDTO {
   coursesEnrolledTo: number[];
 }
 
+export interface RegisterUserDTO {
+  userName: string;
+  userEmail: string;
+  userPassword: string;
+}
+
 export interface CourseDTO {
   courseId: number;
   courseName: string;

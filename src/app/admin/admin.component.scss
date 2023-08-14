@@ -1,44 +1,59 @@
-.users-list {
+.admin-container {
   display: flex;
-  flex-wrap: wrap;
   max-width: 80vw;
-}
-mat-card {
-  margin-bottom: 20px;
-  width: 40%;
-  margin: 10px;
-  font-weight: 600;
+  flex-direction: column;
 
-  .user-info {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    border-bottom: 1px solid #c9c9c9;
-    color: #28282e;
-    p {
-      color: #092e2d;
-      color: #0e4946;
-    }
+  .add-user {
+    margin: 20px;
+    align-self: center;
+    width: 100%;
+    width: 90%;
   }
-  .role-selection {
+
+  .users-list {
     display: flex;
-    flex-direction: column;
-    .btn__update {
-      align-self: flex-end;
-    }
+    flex-wrap: wrap;
+    justify-content: space-around;
   }
-  .user {
-    &-admin {
-      background-color: #4dc1bb;
+
+  mat-card {
+    //FIX - add media-queries
+    margin-bottom: 20px;
+    width: 40%;
+    margin: 10px;
+    font-weight: 600;
+
+    .user-info {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 1px solid #c9c9c9;
+      color: #28282e;
+      p {
+        color: #092e2d;
+        color: #0e4946;
+      }
     }
-    &-professor {
-      background-color: #a4dfdd;
+    .role-selection {
+      display: flex;
+      flex-direction: column;
+      .btn__update {
+        align-self: flex-end;
+      }
     }
-    &-student {
-      background-color: #daf1f1;
-    }
-    &-default {
-      background-color: #ededed;
+    .user {
+      &-admin {
+        background-color: #4dc1bb;
+      }
+      &-professor {
+        background-color: #a4dfdd;
+      }
+      &-student {
+        background-color: #daf1f1;
+      }
+      &-default {
+        background-color: #ededed;
+      }
     }
   }
 }

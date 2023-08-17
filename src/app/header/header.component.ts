@@ -24,6 +24,14 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     this.initLoginState();
   }
 
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('isLoggedIn');
+  }
+
+  isRegisterPage() {
+    return location.href.includes('register');
+  }
+
   logoutUser() {
     this.store.dispatch(new LogoutUser());
     this.store.dispatch(new ClearCurrentUser());
@@ -33,8 +41,8 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     this.router.navigate(['/dashboard']);
   }
 
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('isLoggedIn');
+  goToRegister() {
+    this.router.navigate(['/register']);
   }
 
   private initLoginState() {

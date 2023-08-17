@@ -1,4 +1,6 @@
 <div class="header-content">
   <button *ngIf="isLoggedIn()" (click)="logoutUser()">Logout</button>
   <button *ngIf="isLoggedIn()" (click)="goToDashboard()">Dashboard</button>
+  <!-- <button *ngIf="isRegisterPage()" (click)="goToLogin()">Go To Login</button> -->
+  <button mat-raised-button *ngIf="!isLoggedIn()" (click)="goToRegister()">Register</button>
 </div>

@@ -13,6 +13,7 @@ import {
   UpdateUserRole,
   GetAllUsers,
   RegisterUser,
+  ClearRegisterUser,
 } from './users.actions';
 
 @State<UsersStateModel>({
@@ -214,6 +215,13 @@ export class UsersState {
         })
       )
     );
+  }
+
+  @Action(ClearRegisterUser)
+  clearRegisterUser(ctx: StateContext<UsersStateModel>) {
+    ctx.patchState({
+      registerUser: null,
+    });
   }
 
   private updatedUsers(response: UserDTO, currentUsers: UserDTO[]): UserDTO[] {

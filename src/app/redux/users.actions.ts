@@ -53,3 +53,8 @@ export class RegisterUser {
   static readonly type = '[Users] Register User';
   constructor(public userInfo: RegisterUserDTO) {}
 }
+
+export class ClearRegisterUser {
+  static readonly type = '[Users] Clear Register User';
+  constructor() {}
+}

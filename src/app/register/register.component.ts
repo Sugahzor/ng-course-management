@@ -3,10 +3,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { filter, Observable, takeUntil } from 'rxjs';
+import { ADMIN } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { MyErrorStateMatcher } from '../core/shared/custom/myErrorStateMatcher';
 import { RegisterUserDTO, UserDTO } from '../core/shared/models/app.model';
-import { RegisterUser } from '../redux/users.actions';
+import { ClearRegisterUser, RegisterUser } from '../redux/users.actions';
 import { UsersState } from '../redux/users.state';
 
 @Component({
@@ -60,7 +61,16 @@ export class RegisterComponent extends BaseComponent implements OnInit {
         filter((value) => !!value),
         takeUntil(this.unsubscribe$)
       )
-      .subscribe((response) => this.router.navigate(['/dashboard']));
+      .subscribe((response) =>
+        localStorage.getItem('userRole') === ADMIN
+          ? this.router.navigate(['/dashboard'])
+          : this.cleanupAndGoToLogin()
+      );
+  }
+
+  private cleanupAndGoToLogin() {
+    this.store.dispatch(new ClearRegisterUser());
+    this.router.navigate(['/login']);
   }
 
   private initRegisterUserError() {

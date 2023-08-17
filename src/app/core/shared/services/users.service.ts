@@ -19,11 +19,7 @@ export class UsersService {
   constructor(private http: HttpClient) {}
 
   register(request: RegisterUserDTO): Observable<UserDTO> {
-    return this.http.post<UserDTO>(`${this.FULL_USERS_URL}`, request, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
-      },
-    });
+    return this.http.post<UserDTO>(`${this.FULL_USERS_URL}`, request);
   }
 
   getCurrentUser(): Observable<UserDTO> {

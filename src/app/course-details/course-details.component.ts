@@ -155,6 +155,7 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
         ];
         //TODO: Patch state instead of call?
         this.store.dispatch(new GetLessons());
+        this.store.dispatch(new GetCourseDetails(this.courseId));
       });
   }
 
@@ -195,6 +196,7 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
         ];
         //TODO: Patch state instead of call?
         this.store.dispatch(new GetLessons());
+        this.store.dispatch(new GetCourseDetails(this.courseId));
       });
   }
 }

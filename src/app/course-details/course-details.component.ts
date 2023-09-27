@@ -8,6 +8,7 @@ import {
 import { CoursesState } from '../redux/courses.state';
 import {
   AddLessonsToCourse,
+  ClearCourseDetails,
   ClearDeleteCourseResponse,
   DeleteCourse,
   GetCourseDetails,
@@ -71,6 +72,10 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
     this.initRemoveLessonError();
     this.initDeleteCourseResponse();
     this.initAddLessonsResponse();
+  }
+
+  override ngOnDestroy(): void {
+    this.store.dispatch(new ClearCourseDetails());
   }
 
   isUserProfessor(): boolean {

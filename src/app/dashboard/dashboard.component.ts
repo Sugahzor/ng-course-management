@@ -59,6 +59,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   override ngOnInit(): void {
     this.spinner.show();
     this.store.dispatch(new GetCurrentUser());
+    this.store.dispatch(new GetCourses());
     this.initLoginErrorResponse();
     this.initCurrentUser();
     this.initGetUserError();
@@ -123,7 +124,6 @@ export class DashboardComponent extends BaseComponent implements OnInit {
           this.router.navigate(['/admin']);
         } else {
           this.currentUser = { ...currentUserResponse };
-          this.store.dispatch(new GetCourses());
         }
       });
   }

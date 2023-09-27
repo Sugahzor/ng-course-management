@@ -10,6 +10,7 @@ import {
   CoursesStateModel,
   DeleteCourse,
   GetCourseDetails,
+  ClearCourseDetails,
   GetCourses,
   RemoveLessonFromCourse,
   SaveCourse,
@@ -125,6 +126,13 @@ export class CoursesState {
         });
       })
     );
+  }
+
+  @Action(ClearCourseDetails)
+  clearCourseDetails(ctx: StateContext<CoursesStateModel>) {
+    ctx.patchState({
+      courseDetails: null,
+    });
   }
 
   @Action(AddLessonsToCourse)

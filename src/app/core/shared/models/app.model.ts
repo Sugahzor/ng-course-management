@@ -5,6 +5,7 @@ export interface LoginRequestPayload {
 
 export interface LoginResponse {
   jwt: string;
+  expiration: string;
 }
 
 export interface UserDTO {

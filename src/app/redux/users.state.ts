@@ -14,6 +14,8 @@ import {
   GetAllUsers,
   RegisterUser,
   ClearRegisterUser,
+  DeleteUser,
+  ClearDeleteUser,
 } from './users.actions';
 
 @State<UsersStateModel>({
@@ -31,6 +33,8 @@ import {
     userUpdatedError: '',
     registerUser: null,
     registerUserError: '',
+    deleteUser: false,
+    deleteUserError: '',
   },
 })
 @Injectable()
@@ -95,6 +99,16 @@ export class UsersState {
   @Selector()
   static registerUserError(state: UsersStateModel) {
     return state.registerUserError;
+  }
+
+  @Selector()
+  static deleteUser(state: UsersStateModel) {
+    return state.deleteUser;
+  }
+
+  @Selector()
+  static deleteUserError(state: UsersStateModel) {
+    return state.deleteUserError;
   }
 
   @Action(GetCurrentUser)
@@ -221,6 +235,40 @@ export class UsersState {
   clearRegisterUser(ctx: StateContext<UsersStateModel>) {
     ctx.patchState({
       registerUser: null,
+    });
+  }
+
+  @Action(DeleteUser)
+  deleteUser(ctx: StateContext<UsersStateModel>, action: DeleteUser) {
+    return this.usersService.deleteUser(action.userId).pipe(
+      catchError((error: string) => {
+        ctx.patchState({
+          deleteUserError: error,
+          deleteUser: false,
+        });
+        throw throwError(() => new Error(error));
+      }),
+      tap(() => {
+        let userToDelete = ctx
+          .getState()
+          .users?.find((user) => user.id === action.userId);
+        let userToDeleteIndex = userToDelete
+          ? ctx.getState().users?.indexOf(userToDelete)
+          : null;
+        userToDeleteIndex || userToDeleteIndex === 0
+          ? ctx.getState().users?.splice(userToDeleteIndex, 1)
+          : '';
+        ctx.patchState({
+          deleteUser: true,
+        });
+      })
+    );
+  }
+
+  @Action(ClearDeleteUser)
+  clearDeleteUser(ctx: StateContext<UsersStateModel>) {
+    ctx.patchState({
+      deleteUser: false,
     });
   }
 

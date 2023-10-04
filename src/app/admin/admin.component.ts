@@ -5,7 +5,11 @@ import { filter, Observable, takeUntil } from 'rxjs';
 import { ADMIN, PROFESSOR, STUDENT, USER } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { UserDTO } from '../core/shared/models/app.model';
-import { GetAllUsers, UpdateUserRole } from '../redux/users.actions';
+import {
+  DeleteUser,
+  GetAllUsers,
+  UpdateUserRole,
+} from '../redux/users.actions';
 import { UsersState } from '../redux/users.state';
 
 @Component({
@@ -26,6 +30,8 @@ export class AdminComponent extends BaseComponent implements OnInit {
   @Select(UsersState.usersError) usersError$: Observable<string>;
   @Select(UsersState.userUpdated) userUpdated$: Observable<UserDTO>;
   @Select(UsersState.userUpdatedError) userUpdatedError$: Observable<string>;
+  @Select(UsersState.deleteUser) deleteUser$: Observable<boolean>;
+  @Select(UsersState.deleteUserError) deleteUserError$: Observable<string>;
 
   constructor(private store: Store, private spinner: NgxSpinnerService) {
     super();
@@ -40,6 +46,8 @@ export class AdminComponent extends BaseComponent implements OnInit {
     this.initUsersError();
     this.initUserUpdated();
     this.initUserUpdateError();
+    this.initDeleteUser();
+    this.initDeleteUserError();
   }
 
   getAvailableRoles(currentRole: string): string[] {
@@ -56,6 +64,10 @@ export class AdminComponent extends BaseComponent implements OnInit {
           new UpdateUserRole(userId, this.selectedRole.get(userId) as string)
         )
       : '';
+  }
+
+  deleteUser(userId: number) {
+    userId ? this.store.dispatch(new DeleteUser(userId)) : '';
   }
 
   private initCurrentUser() {
@@ -137,6 +149,29 @@ export class AdminComponent extends BaseComponent implements OnInit {
       )
       .subscribe((error) =>
         console.error(error, 'Update user failed - BE error response')
+      );
+  }
+
+  private initDeleteUser() {
+    this.deleteUser$
+      .pipe(
+        filter((value: boolean) => value === true),
+        takeUntil(this.unsubscribe$)
+      )
+      //use state not call here to refresh users list :
+      .subscribe();
+  }
+
+  private initDeleteUserError() {
+    this.deleteUserError$
+      .pipe(
+        filter(
+          (value: any) => value !== '' && value !== null && value !== undefined
+        ),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((error) =>
+        console.error(error, 'Delete user failed - BE error response')
       );
   }
 }

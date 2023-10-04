@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable, tap } from 'rxjs';
 import { LogoutUser } from 'src/app/redux/auth.actions';
+import { ClearCurrentUser } from 'src/app/redux/users.actions';
 import { environment } from 'src/environments/environment';
 import { AUTH_URL } from '../../constants.model';
 import { LoginRequestPayload, LoginResponse } from '../models/app.model';
@@ -27,9 +28,10 @@ export class AuthService {
       (new Date(expiration).getMinutes() - new Date(Date.now()).getMinutes()) *
       60 *
       1000;
-    setTimeout(
-      () => this.store.dispatch(new LogoutUser()),
-      sessionMilliseconds
-    );
+    setTimeout(() => {
+      //extra this in a helper file - DRY principle
+      this.store.dispatch(new LogoutUser());
+      this.store.dispatch(new ClearCurrentUser());
+    }, sessionMilliseconds);
   }
 }

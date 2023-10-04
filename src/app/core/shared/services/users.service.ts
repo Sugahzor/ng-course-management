@@ -71,4 +71,12 @@ export class UsersService {
       }
     );
   }
+
+  deleteUser(userId: number) {
+    return this.http.delete(`${this.FULL_USERS_URL}/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+      },
+    });
+  }
 }

@@ -23,7 +23,7 @@
       >
         <div class="user-info">
           <p>{{ user.userName }}</p>
-          <button mat-raised-button disabled="true">Delete User</button>
+          <button mat-raised-button (click)="deleteUser(user.id)">Delete User</button>
         </div>
         <mat-expansion-panel
           class="role-selection"

@@ -17,6 +17,8 @@ export interface UsersStateModel {
   userUpdatedError: string;
   registerUser: UserDTO | null;
   registerUserError: string;
+  deleteUser: boolean;
+  deleteUserError: string;
 }
 
 export class GetAllUsers {
@@ -57,4 +59,13 @@ export class RegisterUser {
 export class ClearRegisterUser {
   static readonly type = '[Users] Clear Register User';
   constructor() {}
+}
+
+export class DeleteUser {
+  static readonly type = '[Admin] Delete User';
+  constructor(public userId: number) {}
+}
+
+export class ClearDeleteUser {
+  static readonly type = '[Admin] Clear Delete User';
 }

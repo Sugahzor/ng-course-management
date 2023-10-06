@@ -61,15 +61,15 @@ export class RegisterComponent extends BaseComponent implements OnInit {
         filter((value) => !!value),
         takeUntil(this.unsubscribe$)
       )
-      .subscribe((response) =>
+      .subscribe((response) => {
+        this.store.dispatch(new ClearRegisterUser());
         localStorage.getItem('userRole') === ADMIN
           ? this.router.navigate(['/dashboard'])
-          : this.cleanupAndGoToLogin()
-      );
+          : this.cleanupAndGoToLogin();
+      });
   }
 
   private cleanupAndGoToLogin() {
-    this.store.dispatch(new ClearRegisterUser());
     this.router.navigate(['/login']);
   }
 

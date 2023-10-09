@@ -1,6 +1,7 @@
+@import "../core/shared/styles/variables";
+
 .admin-container {
   display: flex;
-  max-width: 80vw;
   flex-direction: column;
 
   .add-user {
@@ -27,11 +28,11 @@
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      border-bottom: 1px solid #c9c9c9;
-      color: #28282e;
+      border-bottom: 1px solid $nt-grey;
+      color: $nt-charcoal;
       p {
-        color: #092e2d;
-        color: #0e4946;
+        color: $nt-dark-green;
+        color: $nt-green;
       }
     }
     .role-selection {
@@ -43,16 +44,16 @@
     }
     .user {
       &-admin {
-        background-color: #4dc1bb;
+        background-color: $nt-turquoise;
       }
       &-professor {
-        background-color: #a4dfdd;
+        background-color: $nt-light-turquoise;
       }
       &-student {
-        background-color: #daf1f1;
+        background-color: $nt-lighter-turquoise;
       }
       &-default {
-        background-color: #ededed;
+        background-color: $nt-light-grey;
       }
     }
   }

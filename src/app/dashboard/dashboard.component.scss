@@ -1,3 +1,5 @@
+@import "../core/shared/styles/variables";
+
 app-dashboard {
   .dashboard-content {
     display: flex;
@@ -32,7 +34,7 @@ app-dashboard {
       max-width: 65%;
       align-self: center;
       button {
-        background-color: #20b2aa;
+        background-color: $nt-strong-turquoise;
       }
     }
   }

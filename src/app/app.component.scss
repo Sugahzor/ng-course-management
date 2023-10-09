@@ -4,8 +4,6 @@ app-root {
   main {
     margin: 0 auto;
     max-width: 80vw;
-    position: absolute;
-    left: 0;
     app-header {
       background-color: $nt-charcoal;
       position: fixed;
@@ -16,7 +14,7 @@ app-root {
     }
     .main-content {
       display: flex;
-      width: 100vw;
+      width: 100%;
       margin-top: 100px;
     }
   }

@@ -33,7 +33,7 @@ import {
     userUpdatedError: '',
     registerUser: null,
     registerUserError: '',
-    deleteUser: false,
+    deleteUserResponse: false,
     deleteUserError: '',
   },
 })
@@ -102,8 +102,8 @@ export class UsersState {
   }
 
   @Selector()
-  static deleteUser(state: UsersStateModel) {
-    return state.deleteUser;
+  static deleteUserResponse(state: UsersStateModel) {
+    return state.deleteUserResponse;
   }
 
   @Selector()
@@ -244,7 +244,7 @@ export class UsersState {
       catchError((error: string) => {
         ctx.patchState({
           deleteUserError: error,
-          deleteUser: false,
+          deleteUserResponse: false,
         });
         throw throwError(() => new Error(error));
       }),
@@ -259,7 +259,8 @@ export class UsersState {
           ? ctx.getState().users?.splice(userToDeleteIndex, 1)
           : '';
         ctx.patchState({
-          deleteUser: true,
+          deleteUserResponse: true,
+          deleteUserError: ''
         });
       })
     );
@@ -268,7 +269,7 @@ export class UsersState {
   @Action(ClearDeleteUser)
   clearDeleteUser(ctx: StateContext<UsersStateModel>) {
     ctx.patchState({
-      deleteUser: false,
+      deleteUserResponse: false,
     });
   }
 

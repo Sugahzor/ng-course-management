@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { filter, Observable, takeUntil } from 'rxjs';
@@ -11,6 +11,8 @@ import {
   UpdateUserRole,
 } from '../redux/users.actions';
 import { UsersState } from '../redux/users.state';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { InfoDialogComponent } from '../core/shared/custom/info-dialog/info-dialog.component';
 
 @Component({
   selector: 'app-admin',
@@ -30,10 +32,16 @@ export class AdminComponent extends BaseComponent implements OnInit {
   @Select(UsersState.usersError) usersError$: Observable<string>;
   @Select(UsersState.userUpdated) userUpdated$: Observable<UserDTO>;
   @Select(UsersState.userUpdatedError) userUpdatedError$: Observable<string>;
-  @Select(UsersState.deleteUser) deleteUser$: Observable<boolean>;
+  @Select(UsersState.deleteUserResponse)
+  deleteUserResponse$: Observable<boolean>;
   @Select(UsersState.deleteUserError) deleteUserError$: Observable<string>;
 
-  constructor(private store: Store, private spinner: NgxSpinnerService) {
+  constructor(
+    private store: Store,
+    private spinner: NgxSpinnerService,
+    private dialog: MatDialog,
+    private ngZone: NgZone
+  ) {
     super();
   }
 
@@ -66,7 +74,22 @@ export class AdminComponent extends BaseComponent implements OnInit {
       : '';
   }
 
-  deleteUser(userId: number) {
+  onDeleteUser(user: UserDTO) {
+    const dialogConfig = new MatDialogConfig();
+    let data = {
+      dialogTemplate: `Are you sure you want to delete the user ${user.userName}?`,
+      showOkButton: true,
+      onOkClicked: () => this.deleteUser(user.id),
+    };
+    dialogConfig.data = data;
+    dialogConfig.width = '600px';
+    dialogConfig.height = '300px';
+    return this.ngZone.run(() =>
+      this.dialog.open(InfoDialogComponent, dialogConfig)
+    );
+  }
+
+  private deleteUser(userId: number) {
     userId ? this.store.dispatch(new DeleteUser(userId)) : '';
   }
 
@@ -153,7 +176,7 @@ export class AdminComponent extends BaseComponent implements OnInit {
   }
 
   private initDeleteUser() {
-    this.deleteUser$
+    this.deleteUserResponse$
       .pipe(
         filter((value: boolean) => value === true),
         takeUntil(this.unsubscribe$)

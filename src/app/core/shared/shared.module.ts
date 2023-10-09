@@ -8,6 +8,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { InfoDialogComponent } from './custom/info-dialog/info-dialog.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -37,6 +38,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     FormsModule,
     TranslateModule,
     NgxSpinnerModule,
+  ],
+  declarations: [
+    InfoDialogComponent
   ],
 })
 export class SharedModule {}

@@ -17,7 +17,7 @@ export interface UsersStateModel {
   userUpdatedError: string;
   registerUser: UserDTO | null;
   registerUserError: string;
-  deleteUser: boolean;
+  deleteUserResponse: boolean;
   deleteUserError: string;
 }
 

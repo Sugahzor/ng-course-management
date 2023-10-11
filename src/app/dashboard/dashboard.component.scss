@@ -9,13 +9,25 @@ app-dashboard {
     display: inline;
   }
 
+  .course-btn {
+    font-size: medium;
+
+    &:hover {
+      background: $nt-dirty-white;
+      color: $nt-turquoise;
+    }
+
+    .mat-mdc-button-touch-target {
+      background: $nt-dirty-white;
+    }
+  }
+
   .info-card {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
-    // grid-template-rows: repeat(3, 10vw);
     grid-template-rows: 1fr 1fr 1fr;
     margin-bottom: 20px;
-    // justify-content: space-around;
+    align-items: center;
 
     .name-cell {
       display: inline-grid;

@@ -8,6 +8,9 @@
   <p style="color: white">Loading...</p>
 </ngx-spinner>
 <div *ngIf="currentUser$ | async as user">
+  <button class="course-btn" mat-button *ngIf="isUserProfessor()" (click)="addNewCourse()">
+    Add New Course
+  </button>
   <div *ngIf="user.userRole !== ADMIN_ROLE">
     <div *ngIf="coursesResponse$ | async as courses" class="dashboard-content">
       <mat-card *ngFor="let course of courses" class="info-card">
@@ -29,7 +32,7 @@
           </p>
         </article>
         <button
-          class="btn-details"
+          class="course-btn btn-details"
           mat-button
           [routerLink]="['/course', course.courseId]"
         >
@@ -44,7 +47,7 @@
           Enroll in course
         </button>
         <button
-          class="btn-disenroll"
+          class="btn-disenroll course-btn"
           *ngIf="isUserStudent() && isUserEnrolled(course.courseId)"
           mat-button
           (click)="disenrollUser(course.courseId)"
@@ -54,7 +57,4 @@
       </mat-card>
     </div>
   </div>
-  <button *ngIf="isUserProfessor()" mat-button (click)="addNewCourse()">
-    Add New Course
-  </button>
 </div>

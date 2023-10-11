@@ -23,6 +23,10 @@
     width: 40%;
     margin: 10px;
     font-weight: 600;
+    &:not(mat-expansion-panel.mat-expanded) {
+      background-color: $nt-dirty-white;
+      box-shadow: none;
+    }
 
     .user-info {
       display: flex;

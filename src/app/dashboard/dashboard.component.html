@@ -12,7 +12,7 @@
     <div *ngIf="coursesResponse$ | async as courses" class="dashboard-content">
       <mat-card *ngFor="let course of courses" class="info-card">
         <mat-card-header class="name-cell">
-          {{ course.courseName }}
+          <h1>{{ course.courseName }}</h1>
         </mat-card-header>
         <figure class="img-cell">
           <img class="course-img" mat-card-image [src]="course.imageUrl" />

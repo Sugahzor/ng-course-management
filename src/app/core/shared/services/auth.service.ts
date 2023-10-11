@@ -17,6 +17,8 @@ export class AuthService {
 
   constructor(private http: HttpClient, private store: Store) {}
 
+  //TODO: fix token expiry by implementing correct error handling in JAVA
+
   login(loginData: LoginRequestPayload): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(`${this.FULL_AUTH_URL}/login`, loginData)
@@ -25,9 +27,7 @@ export class AuthService {
 
   private setTimerForLogout(expiration: string) {
     const sessionMilliseconds =
-      (new Date(expiration).getMinutes() - new Date(Date.now()).getMinutes()) *
-      60 *
-      1000;
+      (new Date(expiration).getTime() - new Date(Date.now()).getTime());
     setTimeout(() => {
       //extra this in a helper file - DRY principle
       this.store.dispatch(new LogoutUser());

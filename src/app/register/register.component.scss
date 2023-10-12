@@ -1,10 +1,28 @@
+@import "../core/shared/styles/variables";
+
 .register-form {
-    min-width: 150px;
-    max-width: 500px;
-    width: 100%;
-    margin: 0 auto;
+  min-width: 150px;
+  max-width: 500px;
+  width: 80vw;
+  // margin: 0 auto;
+
+  .register-field {
+    display: block;
+  }
+
+  button {
+    margin-top: 15px;
+    font-size: medium;
+
+    &:hover {
+      background: $nt-dirty-white;
+      color: $nt-turquoise;
+    }
+  }
 }
 
-.register-field {
-    display: block;
+:host ::ng-deep {
+  .mat-mdc-button-touch-target {
+    background: $nt-dirty-white;
+  }
 }

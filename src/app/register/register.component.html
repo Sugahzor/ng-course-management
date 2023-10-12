@@ -1,4 +1,3 @@
-<p>register works!</p>
 <form autocomplete="off" class="register-form">
   <!-- NAME -->
   <mat-form-field class="register-field">
@@ -54,17 +53,19 @@
   </mat-form-field>
   <!--CONFIRM PASSWORD -->
   <!-- <mat-form-field class="register-field">
-    <mat-label>Password</mat-label>
-    <input
-      type="password"
-      matInput
-      [formControl]="passwordFormControl"
-      [errorStateMatcher]="matcher"
-      placeholder=""
-    />
-    <mat-error *ngIf="emailFormControl.hasError('required')">
-      Password is <strong>required</strong>
-    </mat-error>
-  </mat-form-field> -->
-  <button mat-button-raised (click)="registerUser()">Register user</button>
+      <mat-label>Password</mat-label>
+      <input
+        type="password"
+        matInput
+        [formControl]="passwordFormControl"
+        [errorStateMatcher]="matcher"
+        placeholder=""
+      />
+      <mat-error *ngIf="emailFormControl.hasError('required')">
+        Password is <strong>required</strong>
+      </mat-error>
+    </mat-form-field> -->
+  <button mat-button mat-raised-button (click)="registerUser()">
+    Register user
+  </button>
 </form>

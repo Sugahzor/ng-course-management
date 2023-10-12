@@ -61,7 +61,7 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
     this.spinner.show();
     setTimeout(
       () => this.store.dispatch(new GetCourseDetails(this.courseId)),
-      5000
+      2000
     );
     this.courseId = parseInt(this.route.snapshot.paramMap.get('id') as string);
     // this.store.dispatch(new GetCourseDetails(this.courseId));
@@ -111,6 +111,11 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
   deleteCourse() {
     this.store.dispatch(new DeleteCourse(this.courseDetails.courseId));
   }
+
+  //TODO: implement scroll lessons list into view
+  // scroll(el: HTMLElement) {
+  //   el.scrollIntoView({ behavior: 'smooth' });
+  // }
 
   private initCourseDetails() {
     this.courseDetails$

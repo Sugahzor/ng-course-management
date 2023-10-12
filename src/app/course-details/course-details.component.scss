@@ -1,29 +1,104 @@
+@import "../core/shared/styles/variables";
 //add responsiveness - media queries
+
 .course-details {
-  border: 2px solid lightseagreen;
   margin-top: 20px;
   padding: 10px;
-}
-img {
-  max-width: 50%;
-  margin-right: 20px;
-  border-top-left-radius: 60px;
-  height: 150px;
-  width: 150px;
-}
-.course-header {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: row;
+
+  display: grid;
+  background-color: $nt-white;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.25fr 0.5fr 1fr 0.25fr;
+  margin-bottom: 20px;
+  align-items: center;
+
+  .img-cell {
+    display: inline-grid;
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 2;
+    grid-row-end: 2;
+
+    .details-img {
+      max-width: 50%;
+      margin-right: 20px;
+      border-top-left-radius: 60px;
+      height: 150px;
+      width: 150px;
+    }
+  }
+
+  .name-cell {
+    display: inline-grid;
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 1;
+    grid-row-end: 1;
+    justify-self: start;
+    margin-left: 20px;
+  }
+
+  .description-cell {
+    display: inline-grid;
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 3;
+    grid-row-end: 3;
+    justify-self: center;
+  }
+
+  .btn-delete {
+    display: inline-grid;
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 4;
+    grid-row-end: 4;
+    justify-self: stretch;
+  }
+
+  .lessons-list {
+    display: inline-grid;
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: span 4;
+    justify-self: center;
+    li {
+      display: flex;
+      p {
+        flex-grow: 2;
+      }
+    }
+  }
 }
 .lessons-container {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 button {
   margin: 10px;
+  font-size: medium;
+
+  &:hover {
+    background: $nt-dirty-white;
+    color: $nt-turquoise;
+  }
 }
-.lessons-list {
-  li {
-    display: flex;
+
+// .details-btn {
+//   font-size: medium;
+
+//   &:hover {
+//     background: $nt-dirty-white;
+//     color: $nt-turquoise;
+//   }
+
+//   // .mat-mdc-button-touch-target {
+//   //   background: $nt-dirty-white;
+//   // }
+// }
+
+:host ::ng-deep {
+  .mat-mdc-button-touch-target {
+    background: $nt-dirty-white;
   }
 }

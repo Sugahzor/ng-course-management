@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "start-pwa": "ng build --configuration production && http-server -p 4200 -c-1 dist/ng-course-management",
     "test": "ng test"
   },
   "private": true,
@@ -25,6 +26,7 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "@ngxs/logger-plugin": "^3.8.1",
     "@ngxs/store": "^3.8.1",
+    "http-server": "^14.1.1",
     "ngx-spinner": "^10.0.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

@@ -3,7 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ACCESS_TOKEN, USERS_URL } from '../../constants.model';
-import { UserEnrollInfoResponse, UserDTO } from '../models/app.model';
+import {
+  UserEnrollInfoResponse,
+  UserDTO,
+  RegisterUserDTO,
+} from '../models/app.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +18,24 @@ export class UsersService {
 
   constructor(private http: HttpClient) {}
 
-  register() {
-    //implement
+  register(request: RegisterUserDTO): Observable<UserDTO> {
+    return this.http.post<UserDTO>(`${this.FULL_USERS_URL}`, request);
+  }
+
+  getCurrentUser(): Observable<UserDTO> {
+    return this.http.get<UserDTO>(`${this.FULL_USERS_URL}/info`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+      },
+    });
+  }
+
+  getAllUsers(): Observable<UserDTO[]> {
+    return this.http.get<UserDTO[]>(`${this.FULL_USERS_URL}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+      },
+    });
   }
 
   enrollUser(courseId: number): Observable<UserEnrollInfoResponse> {
@@ -40,8 +60,20 @@ export class UsersService {
     );
   }
 
-  getCurrentUser(): Observable<UserDTO> {
-    return this.http.get<UserDTO>(`${this.FULL_USERS_URL}/info`, {
+  updateUserRole(userId: number, newRole: string): Observable<UserDTO> {
+    return this.http.put<UserDTO>(
+      `${this.FULL_USERS_URL}/change/role`,
+      { userId, newRole },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+        },
+      }
+    );
+  }
+
+  deleteUser(userId: number) {
+    return this.http.delete(`${this.FULL_USERS_URL}/${userId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
       },

@@ -8,6 +8,7 @@ import {
 import { CoursesState } from '../redux/courses.state';
 import {
   AddLessonsToCourse,
+  ClearCourseDetails,
   ClearDeleteCourseResponse,
   DeleteCourse,
   GetCourseDetails,
@@ -19,6 +20,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PROFESSOR } from '../core/constants.model';
 import { GetLessons } from '../redux/lessons.actions';
 import { LessonsState } from '../redux/lessons.state';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-course-details',
   templateUrl: './course-details.component.html',
@@ -47,7 +49,8 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
   constructor(
     private store: Store,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private spinner: NgxSpinnerService
   ) {
     super();
   }
@@ -55,8 +58,13 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
   //TODO: when here, logout doesnt work
 
   override ngOnInit(): void {
+    this.spinner.show();
+    setTimeout(
+      () => this.store.dispatch(new GetCourseDetails(this.courseId)),
+      2000
+    );
     this.courseId = parseInt(this.route.snapshot.paramMap.get('id') as string);
-    this.store.dispatch(new GetCourseDetails(this.courseId));
+    // this.store.dispatch(new GetCourseDetails(this.courseId));
     this.initCourseDetails();
     this.initLoginErrorResponse();
     this.initSaveLessonResponse();
@@ -64,6 +72,10 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
     this.initRemoveLessonError();
     this.initDeleteCourseResponse();
     this.initAddLessonsResponse();
+  }
+
+  override ngOnDestroy(): void {
+    this.store.dispatch(new ClearCourseDetails());
   }
 
   isUserProfessor(): boolean {
@@ -100,16 +112,21 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
     this.store.dispatch(new DeleteCourse(this.courseDetails.courseId));
   }
 
+  //TODO: implement scroll lessons list into view
+  // scroll(el: HTMLElement) {
+  //   el.scrollIntoView({ behavior: 'smooth' });
+  // }
+
   private initCourseDetails() {
     this.courseDetails$
       .pipe(
         filter((value: any) => value !== null),
         takeUntil(this.unsubscribe$)
       )
-      .subscribe(
-        (courseDetailsResponse: CourseDTO) =>
-          (this.courseDetails = { ...courseDetailsResponse })
-      );
+      .subscribe((courseDetailsResponse: CourseDTO) => {
+        this.courseDetails = { ...courseDetailsResponse };
+        this.spinner.hide();
+      });
   }
 
   private initLoginErrorResponse() {
@@ -148,6 +165,7 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
         ];
         //TODO: Patch state instead of call?
         this.store.dispatch(new GetLessons());
+        this.store.dispatch(new GetCourseDetails(this.courseId));
       });
   }
 
@@ -188,6 +206,7 @@ export class CourseDetailsComponent extends BaseComponent implements OnInit {
         ];
         //TODO: Patch state instead of call?
         this.store.dispatch(new GetLessons());
+        this.store.dispatch(new GetCourseDetails(this.courseId));
       });
   }
 }

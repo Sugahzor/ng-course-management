@@ -1,6 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "./app/core/shared/styles/variables";
+
 body {
-  background-color: #f6f6f6;
+  background-color: $nt-dirty-white;
+  font-family: Helvetica,Arial,sans-serif;
 }

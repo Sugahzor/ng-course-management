@@ -1,37 +1,60 @@
-<div>
-  <div class="dashboard-content" *ngIf="courses && userData">
-    <mat-card *ngFor="let course of courses">
-      <div class="course-info">
-        <mat-card-header>
-          {{ course.courseName }}
-        </mat-card-header>
-        <img mat-card-image [src]="course.imageUrl" />
-      </div>
-      <div class="course-content">
-        <mat-card-content>
-          <p>Course description required</p>
-          <button mat-button [routerLink]="['/course', course.courseId]">
-            Curriculum details
-          </button>
-          <button
-            *ngIf="isUserStudent() && !isUserEnrolled(course.courseId)"
-            mat-button
-            (click)="enrollUser(course.courseId)"
-          >
-            Enroll in course
-          </button>
-          <button
-            *ngIf="isUserStudent() && isUserEnrolled(course.courseId)"
-            mat-button
-            (click)="disenrollUser(course.courseId)"
-          >
-            Disenroll from course
-          </button>
-        </mat-card-content>
-      </div>
-    </mat-card>
-  </div>
-  <button *ngIf="isUserProfessor()" mat-button (click)="addNewCourse()">
+<ngx-spinner
+  bdColor="rgb(48,213,200)"
+  size="medium"
+  color="#fff"
+  type="pacman"
+  [fullScreen]="true"
+>
+  <p style="color: white">Loading...</p>
+</ngx-spinner>
+<div *ngIf="currentUser$ | async as user">
+  <button class="course-btn" mat-button *ngIf="isUserProfessor()" (click)="addNewCourse()">
     Add New Course
   </button>
+  <div *ngIf="user.userRole !== ADMIN_ROLE">
+    <div *ngIf="coursesResponse$ | async as courses" class="dashboard-content">
+      <mat-card *ngFor="let course of courses" class="info-card">
+        <mat-card-header class="name-cell">
+          <h1>{{ course.courseName }}</h1>
+        </mat-card-header>
+        <figure class="img-cell">
+          <img class="course-img" mat-card-image [src]="course.imageUrl" />
+        </figure>
+        <article class="description-cell">
+          <p>
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+            culpa qui officia deserunt mollit anim id est laborum."
+          </p>
+        </article>
+        <button
+          class="course-btn btn-details"
+          mat-button
+          [routerLink]="['/course', course.courseId]"
+        >
+          Curriculum details
+        </button>
+        <button
+          class="btn-enroll"
+          *ngIf="isUserStudent() && !isUserEnrolled(course.courseId)"
+          mat-button
+          (click)="enrollUser(course.courseId)"
+        >
+          Enroll in course
+        </button>
+        <button
+          class="btn-disenroll course-btn"
+          *ngIf="isUserStudent() && isUserEnrolled(course.courseId)"
+          mat-button
+          (click)="disenrollUser(course.courseId)"
+        >
+          Disenroll from course
+        </button>
+      </mat-card>
+    </div>
+  </div>
 </div>

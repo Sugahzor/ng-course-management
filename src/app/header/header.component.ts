@@ -6,6 +6,7 @@ import { LOGGED_OUT } from '../core/constants.model';
 import { BaseComponent } from '../core/shared/base/base.component';
 import { LogoutUser } from '../redux/auth.actions';
 import { AuthState } from '../redux/auth.state';
+import { ClearCurrentUser } from '../redux/users.actions';
 
 @Component({
   selector: 'app-header',
@@ -23,16 +24,25 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     this.initLoginState();
   }
 
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('isLoggedIn');
+  }
+
+  isRegisterPage() {
+    return location.href.includes('register');
+  }
+
   logoutUser() {
     this.store.dispatch(new LogoutUser());
+    this.store.dispatch(new ClearCurrentUser());
   }
 
   goToDashboard() {
     this.router.navigate(['/dashboard']);
   }
 
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('isLoggedIn');
+  goToRegister() {
+    this.router.navigate(['/register']);
   }
 
   private initLoginState() {

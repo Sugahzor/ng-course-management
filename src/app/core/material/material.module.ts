@@ -5,6 +5,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDialogModule } from '@angular/material/dialog';
 
 export const proxiedModules = [
   MatCardModule,
@@ -13,6 +16,9 @@ export const proxiedModules = [
   MatIconModule,
   MatButtonModule,
   MatProgressBarModule,
+  MatExpansionModule,
+  MatRadioModule,
+  MatDialogModule,
 ];
 
 @NgModule({

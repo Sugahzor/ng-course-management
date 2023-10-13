@@ -1,4 +1,10 @@
+@import "../core/shared/styles/variables";
+
 app-login {
+  max-width: 80vw;
+  width: inherit;
+  margin: 50px auto;
+
   mat-card {
     form {
       display: flex;
@@ -15,4 +21,18 @@ app-login {
       }
     }
   }
+
+  .login-btn {
+    margin-bottom: 10px;
+    &:hover {
+      background: $nt-dirty-white;
+      color: $nt-turquoise;
+    }
+  
+    .mat-mdc-button-touch-target {
+      background: $nt-dirty-white;
+    }
+  }
+
+
 }

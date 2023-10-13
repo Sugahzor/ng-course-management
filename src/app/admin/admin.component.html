@@ -1,0 +1,68 @@
+<ngx-spinner
+  bdColor="rgb(48,213,200)"
+  size="medium"
+  color="#fff"
+  type="pacman"
+  [fullScreen]="true"
+>
+  <p style="color: white">Loading...</p>
+</ngx-spinner>
+<div class="admin-container">
+  <button class="add-user" mat-button [routerLink]="['/register']">
+    Add new User
+  </button>
+  <div class="users-list" *ngIf="users$ | async as users">
+    <mat-card *ngFor="let user of users">
+      <mat-card-content
+        [ngClass]="{
+          'user-admin': user.userRole === USER_ROLES[0],
+          'user-professor': user.userRole === USER_ROLES[1],
+          'user-student': user.userRole === USER_ROLES[2],
+          'user-default': user.userRole === USER_ROLES[3]
+        }"
+      >
+        <div class="user-info">
+          <p>{{ user.userName }}</p>
+          <button mat-raised-button color="warn" (click)="onDeleteUser(user)">Delete User</button>
+        </div>
+        <mat-expansion-panel
+          class="role-selection"
+          (opened)="panelOpenState.set(user.id, true)"
+          (closed)="panelOpenState.set(user.id, false)"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title> {{ user.userRole }} </mat-panel-title>
+            <mat-panel-description>
+              <p>
+                {{
+                  panelOpenState.get(user.id)
+                    ? "Choose new role"
+                    : "Click to select new role"
+                }}
+              </p>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-radio-group aria-label="Select an option">
+            <!-- Value condition generates NG0100: Expression has changed after it was checked -->
+            <mat-radio-button
+              *ngFor="let role of getAvailableRoles(user.userRole)"
+              value="{{ panelOpenState.get(user.id) ? role : null }}"
+              (change)="onRoleSelected($event, user.id)"
+            >
+              {{ role }}
+            </mat-radio-button>
+          </mat-radio-group>
+          <div class="btn__update">
+            <button
+              mat-raised-button
+              (click)="updateUserRole(user.id)"
+              [disabled]="selectedRole.get(user.id) === user.userRole"
+            >
+              Update Role
+            </button>
+          </div>
+        </mat-expansion-panel>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

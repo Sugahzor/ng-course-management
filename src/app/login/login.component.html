@@ -1,4 +1,4 @@
-<div>
+<!-- <div> -->
   <mat-card>
     <form [formGroup]="loginForm" autocomplete="off">
       <mat-form-field>
@@ -13,7 +13,7 @@
           <mat-error *ngIf="loginForm.get('password')?.hasError('required')">{{ 'login.passwordRequired' | translate }}
           </mat-error>
       </mat-form-field>
-      <button mat-button (click)="loginUser()">{{ 'login.button' | translate }}</button> 
+      <button class="login-btn" mat-button (click)="loginUser()">{{ 'login.button' | translate }}</button> 
     </form>
   </mat-card>
-</div>
+<!-- </div> -->

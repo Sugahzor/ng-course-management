@@ -28,6 +28,10 @@ export class GetCourseDetails {
   constructor(public courseId: number) {}
 }
 
+export class ClearCourseDetails {
+  static readonly type = '[Course Details Page] Clear Get course details'
+}
+
 export class AddLessonsToCourse {
   static readonly type = '[Course] Add Lesson';
   constructor(public curriculum: CurriculumCreationDTO) {}

@@ -9,17 +9,32 @@ import {
   EnrollUser,
   DisenrollUser,
   GetCurrentUser,
+  ClearCurrentUser,
+  UpdateUserRole,
+  GetAllUsers,
+  RegisterUser,
+  ClearRegisterUser,
+  DeleteUser,
+  ClearDeleteUser,
 } from './users.actions';
 
 @State<UsersStateModel>({
   name: 'users',
   defaults: {
+    users: null,
+    usersError: '',
     userResponse: null,
     getUserError: '',
     userEnrollResponse: null,
     userEnrollError: '',
     userDisenrollResponse: null,
     userDisenrollError: '',
+    userUpdated: null,
+    userUpdatedError: '',
+    registerUser: null,
+    registerUserError: '',
+    deleteUserResponse: false,
+    deleteUserError: '',
   },
 })
 @Injectable()
@@ -34,6 +49,16 @@ export class UsersState {
   @Selector()
   static getUserError(state: UsersStateModel) {
     return state.getUserError;
+  }
+
+  @Selector()
+  static users(state: UsersStateModel) {
+    return state.users;
+  }
+
+  @Selector()
+  static usersError(state: UsersStateModel) {
+    return state.usersError;
   }
 
   @Selector()
@@ -54,6 +79,73 @@ export class UsersState {
   @Selector()
   static userDisenrollError(state: UsersStateModel) {
     return state.userDisenrollError;
+  }
+
+  @Selector()
+  static userUpdated(state: UsersStateModel) {
+    return state.userUpdated;
+  }
+
+  @Selector()
+  static userUpdatedError(state: UsersStateModel) {
+    return state.userUpdatedError;
+  }
+
+  @Selector()
+  static registerUser(state: UsersStateModel) {
+    return state.registerUser;
+  }
+
+  @Selector()
+  static registerUserError(state: UsersStateModel) {
+    return state.registerUserError;
+  }
+
+  @Selector()
+  static deleteUserResponse(state: UsersStateModel) {
+    return state.deleteUserResponse;
+  }
+
+  @Selector()
+  static deleteUserError(state: UsersStateModel) {
+    return state.deleteUserError;
+  }
+
+  @Action(GetCurrentUser)
+  getCurrentUser(ctx: StateContext<UsersStateModel>, action: GetCurrentUser) {
+    return this.usersService.getCurrentUser().pipe(
+      catchError((err: string) => {
+        ctx.patchState({
+          getUserError: err,
+        });
+        throw throwError(() => new Error(err));
+      }),
+      tap((userResponse: UserDTO) => {
+        localStorage.setItem('userRole', userResponse.userRole.toUpperCase());
+        ctx.patchState({
+          userResponse: userResponse,
+          getUserError: '',
+        });
+      })
+    );
+  }
+
+  @Action(GetAllUsers)
+  getAllUsers(ctx: StateContext<UsersStateModel>) {
+    return this.usersService.getAllUsers().pipe(
+      catchError((error) => {
+        ctx.patchState({
+          usersError: error,
+        });
+        throw throwError(() => new Error(error));
+      }),
+      tap((usersResponse) =>
+        ctx.patchState({
+          users: usersResponse,
+          usersError: '',
+        })
+      )
+    );
   }
 
   @Action(EnrollUser)
@@ -90,21 +182,104 @@ export class UsersState {
     );
   }
 
-  @Action(GetCurrentUser)
-  getCurrentUser(ctx: StateContext<UsersStateModel>, action: GetCurrentUser) {
-    return this.usersService.getCurrentUser().pipe(
+  @Action(ClearCurrentUser)
+  clearCurrentUser(ctx: StateContext<UsersStateModel>) {
+    ctx.patchState({
+      userResponse: null,
+    });
+  }
+
+  @Action(UpdateUserRole)
+  updateUserRole(ctx: StateContext<UsersStateModel>, action: UpdateUserRole) {
+    return this.usersService.updateUserRole(action.userId, action.newRole).pipe(
       catchError((err: string) => {
         ctx.patchState({
-          getUserError: err,
+          userUpdatedError: err,
         });
         throw throwError(() => new Error(err));
       }),
-      tap((userResponse: UserDTO) => {
-        localStorage.setItem('userRole', userResponse.userRole.toUpperCase());
+      tap((userUpdatedResponse) => {
         ctx.patchState({
-          userResponse: userResponse,
+          userUpdated: userUpdatedResponse,
+          userUpdatedError: '',
+          users: [
+            ...this.updatedUsers(
+              userUpdatedResponse,
+              ctx.getState().users || []
+            ),
+          ],
         });
       })
     );
+  }
+
+  @Action(RegisterUser)
+  registerUser(ctx: StateContext<UsersStateModel>, action: RegisterUser) {
+    return this.usersService.register(action.userInfo).pipe(
+      catchError((error: string) => {
+        ctx.patchState({
+          registerUserError: error,
+        });
+        throw throwError(() => new Error(error));
+      }),
+      tap((response) =>
+        ctx.patchState({
+          registerUser: response,
+          registerUserError: '',
+        })
+      )
+    );
+  }
+
+  @Action(ClearRegisterUser)
+  clearRegisterUser(ctx: StateContext<UsersStateModel>) {
+    ctx.patchState({
+      registerUser: null,
+    });
+  }
+
+  @Action(DeleteUser)
+  deleteUser(ctx: StateContext<UsersStateModel>, action: DeleteUser) {
+    return this.usersService.deleteUser(action.userId).pipe(
+      catchError((error: string) => {
+        ctx.patchState({
+          deleteUserError: error,
+          deleteUserResponse: false,
+        });
+        throw throwError(() => new Error(error));
+      }),
+      tap(() => {
+        let userToDelete = ctx
+          .getState()
+          .users?.find((user) => user.id === action.userId);
+        let userToDeleteIndex = userToDelete
+          ? ctx.getState().users?.indexOf(userToDelete)
+          : null;
+        userToDeleteIndex || userToDeleteIndex === 0
+          ? ctx.getState().users?.splice(userToDeleteIndex, 1)
+          : '';
+        ctx.patchState({
+          deleteUserResponse: true,
+          deleteUserError: ''
+        });
+      })
+    );
+  }
+
+  @Action(ClearDeleteUser)
+  clearDeleteUser(ctx: StateContext<UsersStateModel>) {
+    ctx.patchState({
+      deleteUserResponse: false,
+    });
+  }
+
+  private updatedUsers(response: UserDTO, currentUsers: UserDTO[]): UserDTO[] {
+    let userToUpdateIndex = currentUsers?.findIndex(
+      (user) => user.id === response.id
+    );
+    userToUpdateIndex && currentUsers?.length
+      ? (currentUsers[userToUpdateIndex] = { ...response })
+      : '';
+    return currentUsers;
   }
 }

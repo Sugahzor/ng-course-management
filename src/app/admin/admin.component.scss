@@ -1,0 +1,64 @@
+@import "../core/shared/styles/variables";
+
+.admin-container {
+  display: flex;
+  flex-direction: column;
+
+  .add-user {
+    margin: 30px 0;
+    margin-left: 5%;
+    align-self: center;
+    align-self: flex-start;
+  }
+
+  .users-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  mat-card {
+    //FIX - add media-queries
+    margin-bottom: 20px;
+    width: 40%;
+    margin: 10px;
+    font-weight: 600;
+    &:not(mat-expansion-panel.mat-expanded) {
+      background-color: $nt-dirty-white;
+      box-shadow: none;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 1px solid $nt-grey;
+      color: $nt-charcoal;
+      p {
+        color: $nt-dark-green;
+        color: $nt-green;
+      }
+    }
+    .role-selection {
+      display: flex;
+      flex-direction: column;
+      .btn__update {
+        align-self: flex-end;
+      }
+    }
+    .user {
+      &-admin {
+        background-color: $nt-turquoise;
+      }
+      &-professor {
+        background-color: $nt-light-turquoise;
+      }
+      &-student {
+        background-color: $nt-lighter-turquoise;
+      }
+      &-default {
+        background-color: $nt-light-grey;
+      }
+    }
+  }
+}

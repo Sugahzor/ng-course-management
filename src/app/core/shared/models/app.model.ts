@@ -5,14 +5,21 @@ export interface LoginRequestPayload {
 
 export interface LoginResponse {
   jwt: string;
+  expiration: string;
 }
 
 export interface UserDTO {
-  id: number | null;
+  id: number;
   userName: string;
   userEmail: string;
   userRole: string;
   coursesEnrolledTo: number[];
+}
+
+export interface RegisterUserDTO {
+  userName: string;
+  userEmail: string;
+  userPassword: string;
 }
 
 export interface CourseDTO {

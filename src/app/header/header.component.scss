@@ -1,7 +1,16 @@
+@import "../core/shared/styles/variables";
+
 .header-content {
   min-height: 50px;
   margin: 20px;
   button {
-    margin: 20px;
+    margin: 10px;
+  }
+}
+
+:host ::ng-deep .mdc-button__label {
+  color: $nt-dirty-white;
+  &:hover {
+    color: $nt-turquoise;
   }
 }
